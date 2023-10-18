@@ -1,6 +1,7 @@
 #ifndef BOOK
 #define BOOK
 #include"class.h"
+
 void book :: bookingHead(){
     system("cls");
     moveCursor(30,2);
@@ -18,6 +19,7 @@ void book :: bookingHead(){
     moveCursor(70,4);
     cout<<"Nationality";
 }
+
 void book :: displayBooking(int a){
     a+=5;
     moveCursor(1,a);
@@ -52,9 +54,9 @@ void book :: insert_booking(){
     cout<<"\t\t\tTHANK YOU FOR BOOKING\n";
     moveCursor(50,12);
     cout<<"\t\tNOTE:You will receive a call to confirm booking\n";
-
     getch();
 } 
+
 void book :: check_booking(){
     system("cls");
     moveCursor(30,2);
@@ -98,5 +100,4 @@ void book :: check_booking(){
     check.close();
     getch();
 }
-using namespace std;
 #endif

@@ -4,7 +4,6 @@
 
 int admin();
 
-
 int main(){
     bool status;
     book l;
