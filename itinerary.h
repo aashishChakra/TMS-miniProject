@@ -1,6 +1,8 @@
 #ifndef ITINERARY
 #define ITINERARY
+
 #include"class.h"
+
 string Itinerary :: get_text(){
     string text;
     text.clear();
@@ -30,6 +32,7 @@ string Itinerary :: get_text(){
     }
     return(text);
 }
+
 string Itinerary:: get_num(){
     string num;
     num.clear();
@@ -48,6 +51,7 @@ string Itinerary:: get_num(){
     }
     return(num);
 }
+
 void Itinerary :: itineraryHead(){
             moveCursor(35,0);
             cout<<"Package List";
@@ -64,6 +68,7 @@ void Itinerary :: itineraryHead(){
             moveCursor(80,4);
             cout<<"Expense(RS)";
 }
+
 void Itinerary :: displayItinerary(int a){
             a+=5;
             moveCursor(1,a);
@@ -79,6 +84,7 @@ void Itinerary :: displayItinerary(int a){
             moveCursor(80,a);
             cout<<expense;
 }
+
 void Itinerary :: add_Itinerary(){
     fstream detail;
     system("cls");
@@ -115,6 +121,7 @@ void Itinerary :: add_Itinerary(){
     detail<<things<<"\n";
     detail.close();
 }
+
 void Itinerary :: list_Itinerary(){
     system("cls");
     fstream list;
@@ -155,6 +162,7 @@ void Itinerary :: list_Itinerary(){
     }
     list.close();
 }
+
 void Itinerary :: search_Itinerary(){
     system("cls");
     moveCursor(30,2);
@@ -216,6 +224,7 @@ void Itinerary :: search_Itinerary(){
     }
     itinerary.close();
 }
+
 void Itinerary :: delete_Itinerary(){
     system("cls");
     moveCursor(30,2);
@@ -274,6 +283,7 @@ void Itinerary :: delete_Itinerary(){
         getch();
     }
 }
+
 void Itinerary :: edit_Itinerary(){
     system("cls");
     moveCursor(30,2);
@@ -363,6 +373,5 @@ void Itinerary :: edit_Itinerary(){
         getch();
     }
 }
-
 
 #endif

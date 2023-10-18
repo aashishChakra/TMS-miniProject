@@ -1,5 +1,6 @@
 #ifndef CLASS
 #define CLASS
+
 #include<iostream>
 #include<conio.h>
 #include<stdio.h>
@@ -9,15 +10,17 @@
 #include<fstream>
 #include<sstream>
 #include<graphics.h>
+
 using namespace std;
+
+static int id;
+int count=0,error=-1;
 
 void moveCursor(int x, int y)
 {
     cout << "\033[" << y << ";" << x << "H";
 }
 
-static int id;
-int count=0,error=-1;
 class login{
     protected:
         char ch;
@@ -47,6 +50,7 @@ class book : public login{
         void bookingHead();
         void displayBooking(int);
 };
+
 class Itinerary{
     protected:
         string packageId,title,start,end,days,expense,things,reach;

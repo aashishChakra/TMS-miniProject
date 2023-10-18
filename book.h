@@ -1,5 +1,6 @@
 #ifndef BOOK
 #define BOOK
+
 #include"class.h"
 
 void book :: bookingHead(){
@@ -35,6 +36,7 @@ void book :: displayBooking(int a){
     moveCursor(70,a);
     cout<<nationality<<endl;
 }
+
 void book :: insert_booking(){
     system("cls");
     cout<<"\t\t\t\tFill the following form."<<endl;
@@ -100,4 +102,5 @@ void book :: check_booking(){
     check.close();
     getch();
 }
+
 #endif

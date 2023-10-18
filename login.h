@@ -1,137 +1,8 @@
-// #ifndef LOGIN
-// #define LOGIN
+#ifndef LOGIN
+#define LOGIN
+
 #include"class.h"
 
-int admin();
-
-int main(){
-    bool status;
-    book l;
-    Itinerary i;
-    char ch,ch1;
-    int choice=1,option = 1;;
-    while(choice != 0){
-        system("CLS");
-        cout<<"1. List Package"
-        <<endl<<"2. Search Package"
-        <<endl<<"3. Login"
-        <<endl<<"4. Register"
-        <<endl<<"5. Exit"
-        <<endl<<"Enter your choice: ";
-        cin>>choice;
-        switch(choice)
-        {
-            case 1:{//list itinerary
-                system("cls");
-                i.list_Itinerary();
-                SEARCH:
-                cout<<endl<<"\n\t\t\tDo you want to view detail of package(Y/N): ";
-                ch=getch();
-                cout<<ch;
-                if(ch == 'y' || ch == 'Y'){
-                    i.search_Itinerary();
-                }
-                else if(ch == 'n' || ch == 'N'){
-                    system("cls");
-                    moveCursor(50,10);
-                    cout<<"Press any key to continue....";
-                    getch();
-                    break;
-                }
-                else{
-                    system("cls");
-                    moveCursor(50,10);
-                    cout<<"Invalid Choice!";
-                    getch();
-                    goto SEARCH;
-                }
-                BOOK:
-                cout<<"Do you want to book this package(Y/N): ";
-                ch1=getch();
-                cout<<ch1;
-                if(ch1 == 'y' || ch1 == 'Y'){
-                    l.insert_booking();
-                    break;
-                }
-                else if(ch1 == 'n' || ch1 == 'N'){
-                    system("cls");
-                    moveCursor(50,10);
-                    cout<<"Press any key to continue....";
-                    getch();
-                    break;
-                }
-                else{
-                    system("cls");
-                    moveCursor(50,10);
-                    cout<<"Invalid Choice!";
-                    moveCursor(50,15);
-                    cout<<"Press any key to continue....";
-                    getch();
-                    goto BOOK;
-                }
-                getch();
-                break;
-            }
-            case 2:{//search itinerary
-                i.search_Itinerary();
-                BOOK2:
-                cout<<endl<<"Do you want to book this package(Y/N): ";
-                ch=getch();
-                cout<<ch;
-                if(ch == 'y' || ch == 'Y'){
-                    l.insert_booking();
-                    break;
-                }
-                else if(ch == 'n' || ch == 'N'){
-                    system("cls");
-                    moveCursor(50,10);
-                    cout<<"Press any key to continue....";
-                    getch();
-                    break;
-                }
-                else{
-                    system("cls");
-                    moveCursor(50,10);
-                    cout<<"Invalid Choice!";
-                    moveCursor(50,15);
-                    cout<<"Press any key to continue....";
-                    getch();
-                    goto BOOK2;
-                }
-                getch();
-                break;
-            }
-            case 3:{//login
-                // if(l.signin()){
-                    admin();
-                // }
-                break;
-            }
-            case 4:{//register
-                system("cls");
-                l.signup(false);
-                getch();
-                break;
-            }
-            case 5:{
-                choice = 0;
-                break;
-            }
-            default:{
-                system("cls");
-                moveCursor(50,15);
-                cout<<"Invalid Choice!!";
-                moveCursor(50,15);
-                cout<<"Press any Key to Continue";
-            }
-        }
-    }
-    system("cls");
-    moveCursor(50,10);
-    cout<<"Thank you for choosing us!!";
-    getch();
-    return 0;
-}
 bool login :: signin(){
     bool status=false;
     system("cls");
@@ -185,6 +56,7 @@ bool login :: signin(){
         signin();
     }
 }
+
 void login :: signup(bool post){
     fstream fout;
     moveCursor(50,2);
@@ -201,6 +73,7 @@ void login :: signup(bool post){
     fout.close();
     cout<<endl<<endl<<"Please Note Your User Id for Future Login."<<endl<<"Your User ID is: "<<userId<<endl;
 }
+
 string login :: get_power(bool post){
     power.clear();
     if(post==true){
@@ -211,6 +84,7 @@ string login :: get_power(bool post){
     }
     return (power);
 }
+
 string login :: get_userId(){
     count=0;
     userId.clear();
@@ -231,6 +105,7 @@ string login :: get_userId(){
     }
     return(userId);
 }
+
 string login :: get_fname(){
     count = 0;
     fname.clear();
@@ -261,6 +136,7 @@ string login :: get_fname(){
     }
     return(fname);
 }
+
 string login :: get_lname(){
     count = 0;
     lname.clear();
@@ -291,6 +167,7 @@ string login :: get_lname(){
     }
     return(lname);
 }
+
 string login :: get_address(){
     count = 0;
     address.clear();
@@ -333,6 +210,7 @@ string login :: get_address(){
     }
     return(address);
 }
+
 string login :: get_phone(){
     error = -1;
     count = 0;
@@ -380,6 +258,7 @@ string login :: get_phone(){
     }
     return (phone);
 }
+
 string login :: get_password(){
     count=0;
     password.clear();
@@ -404,6 +283,7 @@ string login :: get_password(){
     }
     return(password);
 }
+
 string login :: get_nationality(){
     count = 0;
     nationality.clear();
@@ -434,6 +314,7 @@ string login :: get_nationality(){
     }
     return(nationality);
 }
+
 string login :: get_packageId(){
     count=0;
     packageId.clear();
@@ -458,6 +339,7 @@ string login :: get_packageId(){
     }
     return(packageId);
 }
+
 string login :: generate_userId(bool post){
     //here power is already stored from signup
     login l;
@@ -474,61 +356,4 @@ string login :: generate_userId(bool post){
     return(userId);
 }
 
-
-int admin(){
-    int choice=1;
-    book l;
-    Itinerary a;
-    while(choice != 0){
-        system("cls");
-        cout<<"1. Add Itinerary"
-        <<endl<<"2. Edit Itinerary"
-        <<endl<<"3. Delete Itinerary"
-        <<endl<<"4. Logout"
-        <<endl<<"5. View Booking"
-        <<endl<<"Enter your choice: ";
-        cin>>choice;
-        switch(choice){
-            case 1:{
-                system("cls");
-                a.add_Itinerary();
-                getch();
-                break;
-            }
-            case 2:{
-                system("cls");
-                a.edit_Itinerary();
-                break;
-            }
-            case 3:{
-                system("cls");
-                a.delete_Itinerary();
-                getch();
-                break;
-            }
-            case 4:{
-                system("cls");
-                choice = 0;
-                moveCursor(50,10);
-                cout<<"Press any Key to Continue";
-                getch();
-                break;
-            }
-            case 5:{
-                system("cls");
-                l.check_booking();
-                break;
-            }
-            default:{
-                system("cls");
-                moveCursor(50,10);
-                cout<<"Invalid Choice!";
-                moveCursor(50,15);
-                cout<<"Press any Key to Continue";
-                getch();
-                break;
-            }
-        }
-    }
-    return 0;
-}
+#endif
