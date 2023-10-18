@@ -1,0 +1,5 @@
+123;BHAKTAPUR;DHARAN;SY;1;2200;Day 1 : PLACE1;Important Things: ; water; cap; snacks
+514;CHITAWAN;KARNALI;SY;1;2500;Day 1 : PLACE1;Important Things: ; water; snacks; chocolates
+784;GORKHA;JUMLA;SY;1;5000;Day 1 : PLACE1;Important Things: ; water; cap
+102;POKHARA;JOMSON;SY;1;3000;Day 1 : PLACE1;Important Things: ; water; jacket
+886;KATHMANDU;HETAUDA;SY;1;1200;Day 1 : PLACE1;Important Things: ; water; sun glass
