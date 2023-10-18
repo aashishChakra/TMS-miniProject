@@ -7,7 +7,7 @@ int admin();
 
 int main(){
     bool status;
-    login l;
+    book l;
     Itinerary i;
     char ch,ch1;
     int choice=1,option = 1;;
@@ -475,74 +475,10 @@ string login :: generate_userId(bool post){
     return(userId);
 }
 
-void login :: insert_booking(){
-    system("cls");
-    cout<<"\t\t\t\tFill the following form."<<endl;
-    packageId=get_packageId();
-    fname=get_fname();
-    lname=get_lname();
-    address=get_address();
-    phone=get_phone();
-    nationality=get_nationality();
-    fstream add;
-    add.open("booking_detail.txt",ios::out | ios::app);
-    add<<packageId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<nationality<<"\n";
-    add.close();
-    getch();
-    system("CLS");
-    moveCursor(50,10);
-    cout<<"\t\t\tTHANK YOU FOR BOOKING\n";
-    moveCursor(50,12);
-    cout<<"\t\tNOTE:You will receive a call to confirm booking\n";
 
-    getch();
-} 
-void login :: check_booking(){
-    system("cls");
-    moveCursor(30,2);
-    cout<<"Booking List";
-    string ID;
-    fstream check;
-    ID=get_packageId();
-    check.open("booking_detail.txt",ios::in);
-    vector<string>row;
-    string line, word,temp;
-    bookingHead();
-    count = 0;
-    while(!check.eof()){
-        row.clear();
-        getline(check,line);
-        stringstream s(line);
-        while(getline(s,word,';'))
-        {
-            row.push_back(word);
-        }
-        packageId=row[0];
-        fname=row[1];
-        lname=row[2];
-        address=row[3];
-        phone=row[4];
-        nationality=row[5];
-        if(!check.eof()){
-            if(ID == packageId){
-                displayBooking(count);
-                count++;
-            }
-        }
-        if(check.eof()){
-            break;
-        }
-    }
-    if(count == -1){
-        cout<<"Booking Unavailable!";
-        getch();
-    }
-    check.close();
-    getch();
-}
 int admin(){
     int choice=1;
-    login l;
+    book l;
     Itinerary a;
     while(choice != 0){
         system("cls");

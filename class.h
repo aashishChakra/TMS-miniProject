@@ -38,43 +38,15 @@ class login{
         string cpassword();
         string get_power(bool );
         string generate_userId(bool);
-        
-        void insert_booking();
-        void check_booking();
-        void bookingHead(){
-            system("cls");
-            moveCursor(30,2);
-            cout<<"Bookings";
-            moveCursor(1,4);
-            cout<<"Package ID";
-            moveCursor(15,4);
-            cout<<"First Name";
-            moveCursor(27,4);
-            cout<<"Last Name";
-            moveCursor(40,4);
-            cout<<"Address";
-            moveCursor(55,4);
-            cout<<"Phone";
-            moveCursor(70,4);
-            cout<<"Nationality";
-        }
-        void displayBooking(int a){
-            a+=5;
-            moveCursor(1,a);
-            cout<<packageId;
-            moveCursor(15,a);
-            cout<<fname;
-            moveCursor(27,a);
-            cout<<lname;
-            moveCursor(40,a);
-            cout<<address;
-            moveCursor(55,a);
-            cout<<phone;
-            moveCursor(70,a);
-            cout<<nationality<<endl;
-        }
 };
 
+class book : public login{
+    public:
+        void insert_booking();
+        void check_booking();
+        void bookingHead();
+        void displayBooking(int);
+};
 class Itinerary{
     protected:
         string packageId,title,start,end,days,expense,things,reach;
