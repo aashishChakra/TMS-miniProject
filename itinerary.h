@@ -1,34 +1,8 @@
 #ifndef ITINERARY
 #define ITINERARY
-#include<iostream>
-#include<conio.h>
-#include<fstream>
-#include<sstream>
-using namespace std;
-void moveCursor(int x, int y)
-{
-    cout << "\033[" << y << ";" << x << "H";
-}
-class Itinerary{
-    protected:
-        string packageId,title,start,end,days,expense,things,reach;
-        int day;
-        int count = 0;
-    char ch;
-    public:
-        void displayItinerary(int);
-        void itineraryHead();
-        void add_Itinerary();
-        void list_Itinerary();
-        void search_Itinerary();
-        void delete_Itinerary();
-        void edit_Itinerary();
-        string get_text();
-        string get_num();
-};
+#include"class.h"
 string Itinerary :: get_text(){
     string text;
-    
     text.clear();
     ch=getch();
     do{
