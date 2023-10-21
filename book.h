@@ -22,30 +22,36 @@ void book :: displayBooking(int a){//displays the booking details
 
 void book :: insert_booking(){//service for client to add booking
     system("cls");
-    cout<<"\t\t\t\tFill the following form."<<endl;
+    moveCursor(50,2);
+    cout<<"Fill the following form."<<endl;
     packageId=get_packageId();
+    cout<<endl;
     fname=get_fname();
+    cout<<endl;
     lname=get_lname();
+    cout<<endl;
     address=get_address();
+    cout<<endl;
     phone=get_phone();
+    cout<<endl;
     nationality=get_nationality();
+    cout<<endl;
     fstream fout;
     fout.open("zbooking_detail.txt",ios::out | ios::app);
     fout<<packageId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<nationality<<"\n";
     fout.close();
+    cout<<"Press any key to continue...";
     getch();
-    system("CLS");
+    system("cls");
     moveCursor(50,10);
-    cout<<"\t\t\tTHANK YOU FOR BOOKING\n";
+    cout<<"THANK YOU FOR BOOKING WITH US";
     moveCursor(50,12);
-    cout<<"\t\tNOTE:You will receive a call to confirm booking\n";
+    cout<<"NOTE: You will receive a call to confirm booking.";
     getch();
 } 
 
 void book :: check_booking(){//service for admin to see list of booking
     system("cls");
-    moveCursor(30,2);
-    cout<<"Booking List";
     string ID;
     fstream fin;
     ID=get_packageId();
@@ -79,7 +85,12 @@ void book :: check_booking(){//service for admin to see list of booking
         }
     }
     if(count == -1){
+        moveCursor(50,2);
+        cout<<"Bookings";
+        moveCursor(50,10);
         cout<<"Booking Unavailable!";
+        moveCursor(50,15);
+        cout<<"Press any key to continue...";
         getch();
     }
     fin.close();
@@ -88,7 +99,7 @@ void book :: check_booking(){//service for admin to see list of booking
 
 void book :: bookingHead(){//prints the head in booking 
     system("cls");
-    moveCursor(30,2);
+    moveCursor(50,2);
     cout<<"Bookings";
     moveCursor(1,4);
     cout<<"Package ID";

@@ -246,7 +246,7 @@ void Itinerary :: edit_Itinerary(){
     fout.open("zitinerary2.txt",ios::out|ios::app);
     vector<string>row;
     string line, word;
-    count == 0;
+    count = 0;
     cout<<endl<<"Enter Package ID: ";
     ID=get_num(5);
     cout<<endl;

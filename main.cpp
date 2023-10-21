@@ -1,10 +1,9 @@
 #include"class.h"
-
 #include"itinerary.h"
 #include"book.h"
 #include"login.h"
 
-int admin(){
+int admin(string id){
     choice = 1;
     book l;
     Itinerary a;
@@ -14,7 +13,8 @@ int admin(){
         <<endl<<"2. Edit Itinerary"
         <<endl<<"3. Delete Itinerary"
         <<endl<<"4. View Booking"
-        <<endl<<"5. Logout"
+        <<endl<<"5. Change Password"
+        <<endl<<"6. Logout"
         <<endl<<"Enter your choice: ";
         cin>>choice;
         switch(choice){
@@ -40,9 +40,14 @@ int admin(){
             }
             case 5:{
                 system("cls");
+                l.change_password(id);
+                break;
+            }
+            case 6:{
+                system("cls");
                 choice = 0;
-                moveCursor(50,10);
-                cout<<"Press any Key to Continue";
+                moveCursor(50,15);
+                cout<<"Press any Key to Continue...";
                 getch();
                 break;
             }
@@ -51,7 +56,7 @@ int admin(){
                 moveCursor(50,10);
                 cout<<"Invalid Choice!";
                 moveCursor(50,15);
-                cout<<"Press any Key to Continue";
+                cout<<"Press any Key to Continue...";
                 getch();
                 break;
             }
@@ -61,16 +66,20 @@ int admin(){
 }
 
 int client(){
-    system("cls");
     book l;
     Itinerary i;
     char ch,ch1;
     choice = 1;
     while (choice != 0){
-        cout<<"1. List Package"
-        <<endl<<"2. Search Package"
-        <<endl<<"3. Exit"
-        <<endl<<"Enter your choice: ";
+        system("cls");
+        moveCursor(50,6);
+        cout<<"1. List Package";
+        moveCursor(50,7);
+        cout<<"2. Search Package";
+        moveCursor(50,8);
+        cout<<"3. Exit";
+        moveCursor(50,9);
+        cout<<"Enter your choice: ";
         cin>>choice;
         switch(choice){
             case 1:{//list
@@ -85,7 +94,7 @@ int client(){
                     }
                     else if(ch == 'n' || ch == 'N'){
                         system("cls");
-                        moveCursor(50,10);
+                        moveCursor(50,15);
                         cout<<"Press any key to continue....";
                         getch();
                         break;
@@ -94,9 +103,12 @@ int client(){
                         system("cls");
                         moveCursor(50,10);
                         cout<<"Invalid Choice!";
+                        moveCursor(50,15);
+                        cout<<"Press any key to continue....";
                         getch();
                         goto SEARCH;
                     }
+                    getch();
                 BOOK1:
                     cout<<"Do you want to book this package(Y/N): ";
                     ch1=getch();
@@ -107,7 +119,7 @@ int client(){
                     }
                     else if(ch1 == 'n' || ch1 == 'N'){
                         system("cls");
-                        moveCursor(50,10);
+                        moveCursor(50,15);
                         cout<<"Press any key to continue....";
                         getch();
                         break;
@@ -121,6 +133,7 @@ int client(){
                         getch();
                         goto BOOK1;
                     }
+                    getch();
             }
             case 2:{//search
                 system("cls");
@@ -135,7 +148,7 @@ int client(){
                     }
                     else if(ch == 'n' || ch == 'N'){
                         system("cls");
-                        moveCursor(50,10);
+                        moveCursor(50,15);
                         cout<<"Press any key to continue....";
                         getch();
                         break;
@@ -153,17 +166,17 @@ int client(){
             case 3:{//exit
                 system("cls");
                 choice = 0;
-                moveCursor(50,10);
-                cout<<"Press any Key to Continue";
+                moveCursor(50,15);
+                cout<<"Press any Key to Continue...";
                 getch();
                 break;
             }
             default:{
                 system("cls");
+                moveCursor(50,10);
+                cout<<"Invalid Choice!";
                 moveCursor(50,15);
-                cout<<"Invalid Choice!!";
-                moveCursor(50,15);
-                cout<<"Press any Key to Continue";
+                cout<<"Press any Key to Continue...";
                 getch();
                 break;
             }
@@ -174,20 +187,31 @@ int client(){
 
 int main(){
     login l;
+    string id;
     choice=1;
+    system("cls");
+    moveCursor(50,10);
+    cout<<"WELCOME TO AARC TRAVEL MANAGEMENT SYSTEM...";
+    moveCursor(50,20);
+    cout<<"Press any key to continue....";
+    getch();
     while(choice != 0){
         system("CLS");
-        cout<<"1. ADMIN"
-        <<endl<<"2. CLIENT"
-        <<endl<<"3. REGISTER"
-        <<endl<<"4. EXIT"
-        <<endl<<"Enter your choice: ";
+        moveCursor(50,6);
+        cout<<"1. ADMIN";
+        moveCursor(50,7);
+        cout<<"2. CLIENT";
+        moveCursor(50,8);
+        cout<<"3. REGISTER";
+        moveCursor(50,9);
+        cout<<"4. EXIT";
+        moveCursor(50,10);
+        cout<<"Enter your choice: ";
         cin>>choice;
         switch(choice){
             case 1:{
-                // if(l.signin()){
-                    admin();
-                // }
+                id = l.signin();
+                admin(id);
                 choice = 1;
                 break;
             }
@@ -212,7 +236,7 @@ int main(){
                 moveCursor(50,10);
                 cout<<"Invalid Choice!!";
                 moveCursor(50,15);
-                cout<<"Press any Key to Continue";
+                cout<<"Press any Key to Continue...";
             }
         }
     }

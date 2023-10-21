@@ -3,58 +3,60 @@
 
 #include"class.h"
 
-bool login :: signin(){
-    bool status=false;
-    system("cls");
+string login :: signin(){
     string id,ps;
-    userId.clear();
-    password.clear();
-    moveCursor(50,2);
-    cout<<"Login";
-    cout<<endl;
-    id=get_userId();
-    ps=get_password();
-    fstream fin;
-    fin.open("zlogin.txt",ios::in);
-    vector<string>row;
-    string line, word;
-    count = 0;
-    while(!fin.eof()){
-        row.clear();
-        getline(fin,line);
-        stringstream s(line);
-        while(getline(s,word,';'))
-        {
-            row.push_back(word);
-        }
-        if(!fin.eof()){
-            userId=row[1];
-            password=row[2];
-            if( userId == id && password == ps ){
-                system("cls");
-                status = true;
-                moveCursor(50,10);
-                cout<<"Login Successfull!";
-                moveCursor(50,15);
-                cout<<"Press any key to continue...";
-                getch();
-                return(status);
+    SIGNIN_TOP:
+        system("cls");
+        userId.clear();
+        password.clear();
+        moveCursor(50,2);
+        cout<<"Login";
+        moveCursor(50,10);
+        id=get_userId();
+        moveCursor(50,12);
+        ps=get_password();
+        fstream fin;
+        fin.open("zlogin.txt",ios::in);
+        vector<string>row;
+        string line, word;
+        count = 0;
+        while(!fin.eof()){
+            row.clear();
+            getline(fin,line);
+            stringstream s(line);
+            while(getline(s,word,';'))
+            {
+                row.push_back(word);
+            }
+            if(!fin.eof()){
+                userId=row[1];
+                password=row[2];
+                if( userId == id && password == ps ){
+                    system("cls");
+                    moveCursor(50,2);
+                    cout<<"Login";
+                    moveCursor(50,10);
+                    cout<<"Login Successfull!";
+                    moveCursor(50,15);
+                    cout<<"Press any key to continue...";
+                    getch();
+                    return(userId);
+                }
+            }
+            if(fin.eof()){
+                break;
             }
         }
-        if(fin.eof()){
-            break;
-        }
-    }
-    fin.close();
-    if(status == false){
+        fin.close();
         system("cls");
+        moveCursor(50,2);
+        cout<<"Login";
         moveCursor(50,10);
         cout<<"Invalid attempt!";
         moveCursor(50,15);
         cout<<"Press any key to continue...";
         getch();
-        signin();
-    }
+        goto SIGNIN_TOP;
 }
 
 void login :: signup(bool post){
@@ -62,9 +64,13 @@ void login :: signup(bool post){
     moveCursor(50,2);
     cout<<"Register"<<endl;
     fname=get_fname();
+    cout<<endl;
     lname=get_lname();
+    cout<<endl;
     address=get_address();
+    cout<<endl;
     phone=get_phone();
+    cout<<endl;
     password=get_password();
     power=get_power(post);//true for admin, false for author
     userId=generate_userId(post);
@@ -96,7 +102,7 @@ string login :: get_userId(){
 string login :: get_fname(){
     count = 0;
     fname.clear();
-    cout<<endl<<"First Name: ";
+    cout<<"First Name: ";
     fname = get_text();
     return(fname);
 }
@@ -104,7 +110,7 @@ string login :: get_fname(){
 string login :: get_lname(){
     count = 0;
     lname.clear();
-    cout<<endl<<"Last Name: ";
+    cout<<"Last Name: ";
     lname = get_text();
     return(lname);
 }
@@ -113,7 +119,7 @@ string login :: get_address(){
     ADDRESS_TOP:
         count = 0;
         address.clear();
-        cout<<endl<<"Address: ";
+        cout<<"Address: ";
         ch=getch();
         while(ch != 13 ){
             if(ch == 8 and count != 0){
@@ -158,7 +164,7 @@ string login :: get_phone(){
         error = -1;
         count = 0;
         phone.clear();
-        cout<<endl<<"Phone: ";
+        cout<<"Phone: ";
         ch=getch();
         while(ch != 13 ){//runs until enter is pressed
             if(ch == 8 && count > 0){//presses backspace
@@ -205,7 +211,7 @@ string login :: get_password(){
     PASSWORD_TOP:
         count=0;
         password.clear();
-        cout<<endl<<"Password: ";
+        cout<<"Password: ";
         ch=getch();
         while(ch != 13){
             if(ch == 8 && count != 0){
@@ -221,7 +227,7 @@ string login :: get_password(){
             ch=getch();
         }
         if(count == 0){
-            cout<<endl<<"Re-Enter: ";
+            cout<<endl<<"Re-Enter ";
             goto PASSWORD_TOP;
         }
         else{
@@ -232,7 +238,7 @@ string login :: get_password(){
 string login :: get_nationality(){
     count = 0;
     nationality.clear();
-    cout<<endl<<"Nationality: ";
+    cout<<"Nationality: ";
     nationality = get_text();
     return(nationality);
 }
@@ -240,7 +246,7 @@ string login :: get_nationality(){
 string login :: get_packageId(){
     count=0;
     packageId.clear();
-    cout<<endl<<"Package Id: ";
+    cout<<"Package Id: ";
     packageId = get_num(5);
     return(packageId);
 }
@@ -260,6 +266,136 @@ string login :: generate_userId(bool post){
     }
     userId=to_string(id);
     return(userId);
+}
+
+string login :: change_password(string id){
+    string old, reset, confirm;
+    login l;
+    fstream fin, fout;
+    fin.open("zlogin.txt",ios::in);
+    fout.open("zlogin2.txt",ios::out | ios::app);
+    CHANGE_TOP:
+        system("cls");
+        moveCursor(50,2);
+        cout<<"Change Password"<<endl;
+        error = -1;
+        userId.clear();
+        moveCursor(50,9);
+        userId=l.get_userId();
+        vector<string>row;
+        string line, word;
+        if(id != userId){
+            system("cls");
+            moveCursor(50,2);
+            cout<<"Change Password"<<endl;
+            moveCursor(50,10);
+            cout<<"Invalid UserId!";
+            moveCursor(50,15);
+            cout<<"Press any key to continue...";
+            getch();
+            goto CHANGE_TOP;
+        }
+        while(!fin.eof()){
+            row.clear();
+            getline(fin,line);
+            count = 0;
+            stringstream s(line);
+            while(getline(s,word,';'))
+            {
+                row.push_back(word);
+                count ++;
+            }
+            if(!fin.eof()){
+                if(userId == row[1]){
+                    error ++;
+                    password = row[2];
+                    OLD_TOP:
+                        old.clear();
+                        moveCursor(50,10);
+                        cout<<"Current ";
+                        old = l.get_password();
+                        if(old == password){
+                            PASSWORD_TOP:
+                                system("cls");
+                                moveCursor(50,2);
+                                cout<<"Change Password";
+                                moveCursor(50,9);
+                                cout<<"New ";
+                                reset = l.get_password();
+                                moveCursor(50,10);
+                                cout<<"Confirm ";
+                                confirm = l.get_password();
+                                if( (reset == confirm) && (old != reset)){
+                                    fout<<row[0]<<";"<<row[1]<<";"<<reset<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<"\n";
+                                }
+                                else if(old == reset){
+                                    system("cls");
+                                    moveCursor(50,2);
+                                    cout<<"Change Password";
+                                    moveCursor(50,10);
+                                    cout<<"Old Password Matches New Password!";
+                                    moveCursor(50,15);
+                                    cout<<"Press any key to continue...";
+                                    getch();
+                                    goto PASSWORD_TOP;
+                                }
+                                else{
+                                    system("cls");
+                                    moveCursor(50,2);
+                                    cout<<"Change Password";
+                                    moveCursor(50,10);
+                                    cout<<"Password Mismatch!";
+                                    moveCursor(50,15);
+                                    cout<<"Press any key to continue...";
+                                    getch();
+                                    goto PASSWORD_TOP;
+                                }
+                        }
+                        else{
+                            system("cls");
+                            moveCursor(50,2);
+                            cout<<"Change Password";
+                            moveCursor(50,10);
+                            cout<<"Invalid Password!";
+                            moveCursor(50,15);
+                            cout<<"Press any key to continue...";
+                            getch();
+                            system("cls");
+                            moveCursor(50,2);
+                            cout<<"Change Password";
+                            moveCursor(50,9);
+                            cout<<"USER ID: "<<userId;
+                            goto OLD_TOP;
+                        }
+                }
+                else{
+                    for(int i = 0; i<count;i++){
+                        fout<<row[i]<<";";
+                    }
+                    fout<<"\n";
+                }
+            }
+            if(fin.eof()){
+                break;
+            }
+        }
+        fin.close();
+        fout.close();
+        remove("zlogin.txt");
+        rename("zlogin2.txt","zlogin.txt");
+        if(error == -1){
+            goto CHANGE_TOP;
+        }
+        else{
+            system("cls");
+            moveCursor(50,2);
+            cout<<"Change Password"<<endl;
+            moveCursor(50,10);
+            cout<<"Password Changed Successfully!";
+            moveCursor(50,15);
+            cout<<"Press any key to continue...";
+            getch();
+        }
 }
 
 #endif

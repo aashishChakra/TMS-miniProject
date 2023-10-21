@@ -25,10 +25,8 @@ class login{
     protected:
         string userId, password, fname, lname, address, phone, email, power,nationality,packageId;
     public:
-        void writeFile();
-        void display();
         void signup(bool);
-        bool signin();
+        string signin();
         string get_userId();
         string get_password();
         string get_fname();
@@ -37,7 +35,7 @@ class login{
         string get_phone();
         string get_nationality();
         string get_packageId();
-        string cpassword();
+        string change_password(string);
         string get_power(bool );
         string generate_userId(bool);
 };
