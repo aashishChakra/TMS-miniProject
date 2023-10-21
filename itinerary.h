@@ -3,7 +3,6 @@
 
 #include"class.h"
 
-
 void Itinerary :: itineraryHead(){
             moveCursor(35,0);
             cout<<"Package List";
@@ -54,7 +53,7 @@ void Itinerary :: add_Itinerary(){
     days=get_num(2);
     cout<<endl<<"Expense(RS): ";
     expense=get_num(7);
-    fout.open("itinerary.txt",ios::out | ios::app);//stores normal details
+    fout.open("zitinerary.txt",ios::out | ios::app);//stores normal details
     fout<<packageId<<";"<<title<<";"<<start<<";"<<end<<";"<<days<<";"<<expense<<";";    
 // list of location and important things are stored in seperate file for convinence
 // package id is store in begining to avoid conflicts
@@ -67,7 +66,7 @@ void Itinerary :: add_Itinerary(){
     }
     fout<<"Important Things: "<<";";
     cout<<endl<<"Important Things: "<<endl;
-    cout<<"*Note:Use ';[space]' to seperate sentence\n"<<endl;
+    cout<<"*Note:Use '; [space]' to seperate sentence\n"<<endl;
     cin.ignore();
     getline(cin,things);
     fout<<things<<"\n";
@@ -77,7 +76,7 @@ void Itinerary :: add_Itinerary(){
 void Itinerary :: list_Itinerary(){
     system("cls");
     fstream fin;
-    fin.open("itinerary.txt",ios::in);
+    fin.open("zitinerary.txt",ios::in);
     vector<string>row;
     string line, word,temp;
     count = 0;
@@ -123,7 +122,7 @@ void Itinerary :: search_Itinerary(){
     int check = -1;
     string ID;
     fstream fin;
-    fin.open("itinerary.txt",ios::in);
+    fin.open("zitinerary.txt",ios::in);
     vector<string>row;
     string line, word;
     count == 0;
@@ -188,8 +187,8 @@ void Itinerary :: delete_Itinerary(){
     fstream fin,fout;
     vector<string>row;
     string line, word;
-    fin.open("itinerary.txt",ios::in);
-    fout.open("itinerary2.txt",ios::out);
+    fin.open("zitinerary.txt",ios::in);
+    fout.open("zitinerary2.txt",ios::out);
     while(!fin.eof()){
         check=1;
         row.clear();
@@ -226,10 +225,10 @@ void Itinerary :: delete_Itinerary(){
         system("cls");
         fin.close();
         fout.close();
-        remove("itinerary.txt");
-        rename("itinerary2.txt","itinerary.txt");
+        remove("zitinerary.txt");
+        rename("zitinerary2.txt","zitinerary.txt");
         moveCursor(30,10);
-        cout<<"Package Id: "<<packageId<<" deleted successfully!";
+        cout<<"Package Id: "<<packageId<<" Deleted Successfully!";
         moveCursor(30,15);
         cout<<"Press any key to continue....";
         getch();
@@ -243,8 +242,8 @@ void Itinerary :: edit_Itinerary(){
     int check = -1;
     string ID;
     fstream fin,fout;
-    fin.open("itinerary.txt",ios::in);
-    fout.open("itinerary2.txt",ios::out|ios::app);
+    fin.open("zitinerary.txt",ios::in);
+    fout.open("zitinerary2.txt",ios::out|ios::app);
     vector<string>row;
     string line, word;
     count == 0;
@@ -314,12 +313,12 @@ void Itinerary :: edit_Itinerary(){
     }
     fin.close();
     fout.close();
-    remove("itinerary.txt");
-    rename("itinerary2.txt","itinerary.txt");
+    remove("zitinerary.txt");
+    rename("zitinerary2.txt","zitinerary.txt");
     if(check != -1){
         system("cls");
         moveCursor(50,10);
-        cout<<"Package Id: "<<packageId<<" edited successfully!";
+        cout<<"Package Id: "<<packageId<<" Edited Successfully!";
         moveCursor(50,15);
         cout<<"Press any key to continue....";
         getch();

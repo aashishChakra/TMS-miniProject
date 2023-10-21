@@ -30,7 +30,7 @@ void book :: insert_booking(){//service for client to add booking
     phone=get_phone();
     nationality=get_nationality();
     fstream fout;
-    fout.open("booking_detail.txt",ios::out | ios::app);
+    fout.open("zbooking_detail.txt",ios::out | ios::app);
     fout<<packageId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<nationality<<"\n";
     fout.close();
     getch();
@@ -49,7 +49,7 @@ void book :: check_booking(){//service for admin to see list of booking
     string ID;
     fstream fin;
     ID=get_packageId();
-    fin.open("booking_detail.txt",ios::in);
+    fin.open("zbooking_detail.txt",ios::in);
     vector<string>row;
     string line, word,temp;
     bookingHead();

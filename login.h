@@ -15,7 +15,7 @@ bool login :: signin(){
     id=get_userId();
     ps=get_password();
     fstream fin;
-    fin.open("login.txt",ios::in);
+    fin.open("zlogin.txt",ios::in);
     vector<string>row;
     string line, word;
     count = 0;
@@ -68,7 +68,7 @@ void login :: signup(bool post){
     password=get_password();
     power=get_power(post);//true for admin, false for author
     userId=generate_userId(post);
-    fout.open("login.txt",ios::out | ios:: app);
+    fout.open("zlogin.txt",ios::out | ios:: app);
     fout<<power<<";"<<userId<<";"<<password<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<"\n";
     fout.close();
     cout<<endl<<endl<<"Please Note Your User Id for Future Login."<<endl<<"Your User ID is: "<<userId<<endl;
