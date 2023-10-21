@@ -247,6 +247,7 @@ string login :: get_packageId(){
 
 string login :: generate_userId(bool post){
     //here power is already stored from signup
+    int id;
     login l;
     userId.clear();
     if(post){//admin

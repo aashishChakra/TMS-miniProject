@@ -13,9 +13,8 @@
 
 using namespace std;
 
-static int id;
 char ch;
-int count=0,error=-1;
+int count=0,error=-1, choice=1;
 
 void moveCursor(int x, int y)
 {
