@@ -160,9 +160,9 @@ int main(){
                 break;
             }
             case 3:{//login
-                if(l.signin()){
+                // if(l.signin()){
                     admin();
-                }
+                // }
                 break;
             }
             case 4:{//register

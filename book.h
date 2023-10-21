@@ -2,26 +2,9 @@
 #define BOOK
 
 #include"class.h"
+//for clients to book packages
 
-void book :: bookingHead(){
-    system("cls");
-    moveCursor(30,2);
-    cout<<"Bookings";
-    moveCursor(1,4);
-    cout<<"Package ID";
-    moveCursor(15,4);
-    cout<<"First Name";
-    moveCursor(27,4);
-    cout<<"Last Name";
-    moveCursor(40,4);
-    cout<<"Address";
-    moveCursor(55,4);
-    cout<<"Phone";
-    moveCursor(70,4);
-    cout<<"Nationality";
-}
-
-void book :: displayBooking(int a){
+void book :: displayBooking(int a){//displays the booking details
     a+=5;
     moveCursor(1,a);
     cout<<packageId;
@@ -37,7 +20,7 @@ void book :: displayBooking(int a){
     cout<<nationality<<endl;
 }
 
-void book :: insert_booking(){
+void book :: insert_booking(){//service for client to add booking
     system("cls");
     cout<<"\t\t\t\tFill the following form."<<endl;
     packageId=get_packageId();
@@ -46,10 +29,10 @@ void book :: insert_booking(){
     address=get_address();
     phone=get_phone();
     nationality=get_nationality();
-    fstream add;
-    add.open("booking_detail.txt",ios::out | ios::app);
-    add<<packageId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<nationality<<"\n";
-    add.close();
+    fstream fout;
+    fout.open("booking_detail.txt",ios::out | ios::app);
+    fout<<packageId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<nationality<<"\n";
+    fout.close();
     getch();
     system("CLS");
     moveCursor(50,10);
@@ -59,21 +42,21 @@ void book :: insert_booking(){
     getch();
 } 
 
-void book :: check_booking(){
+void book :: check_booking(){//service for admin to see list of booking
     system("cls");
     moveCursor(30,2);
     cout<<"Booking List";
     string ID;
-    fstream check;
+    fstream fin;
     ID=get_packageId();
-    check.open("booking_detail.txt",ios::in);
+    fin.open("booking_detail.txt",ios::in);
     vector<string>row;
     string line, word,temp;
     bookingHead();
     count = 0;
-    while(!check.eof()){
+    while(!fin.eof()){
         row.clear();
-        getline(check,line);
+        getline(fin,line);
         stringstream s(line);
         while(getline(s,word,';'))
         {
@@ -85,13 +68,13 @@ void book :: check_booking(){
         address=row[3];
         phone=row[4];
         nationality=row[5];
-        if(!check.eof()){
+        if(!fin.eof()){
             if(ID == packageId){
                 displayBooking(count);
                 count++;
             }
         }
-        if(check.eof()){
+        if(fin.eof()){
             break;
         }
     }
@@ -99,8 +82,26 @@ void book :: check_booking(){
         cout<<"Booking Unavailable!";
         getch();
     }
-    check.close();
+    fin.close();
     getch();
+}
+
+void book :: bookingHead(){//prints the head in booking 
+    system("cls");
+    moveCursor(30,2);
+    cout<<"Bookings";
+    moveCursor(1,4);
+    cout<<"Package ID";
+    moveCursor(15,4);
+    cout<<"First Name";
+    moveCursor(27,4);
+    cout<<"Last Name";
+    moveCursor(40,4);
+    cout<<"Address";
+    moveCursor(55,4);
+    cout<<"Phone";
+    moveCursor(70,4);
+    cout<<"Nationality";
 }
 
 #endif

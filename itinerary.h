@@ -3,54 +3,6 @@
 
 #include"class.h"
 
-string Itinerary :: get_text(){
-    string text;
-    text.clear();
-    ch=getch();
-    do{
-        if(ch == 8 && count != 0){//backspace
-            cout<<"\b";
-            text.pop_back();
-            count--;
-        }
-        else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122)){//alphabets
-            cout<<ch;
-            if(ch>=97 && ch<=122){//lower to upper case
-                ch-=32;
-                text.push_back(ch);
-            }
-            else{
-                text.push_back(ch);
-            }
-            count++;
-        }
-        ch=getch();
-    }while(ch != 13 && count != 20);
-    if(count == 0){
-        cout<<"Invalid Last Name"<<endl<<"Re-Enter ";
-        get_text();
-    }
-    return(text);
-}
-
-string Itinerary:: get_num(){
-    string num;
-    num.clear();
-        ch=getch();
-    while(ch != 13){//runs until enter is pressed
-        if(ch == 8){//presses backspace
-            cout<<"\b";
-            num.pop_back();
-            count -= 1;
-        }
-        else if(ch >= 48 && ch <= 57){//reads only number
-            cout<<ch;
-            num.push_back(ch);
-        }
-        ch=getch();
-    }
-    return(num);
-}
 
 void Itinerary :: itineraryHead(){
             moveCursor(35,0);
@@ -86,12 +38,12 @@ void Itinerary :: displayItinerary(int a){
 }
 
 void Itinerary :: add_Itinerary(){
-    fstream detail;
+    fstream fout;
     system("cls");
     cout<<"Fill the below details:"
     <<endl<<"*NOTE:Use [space] before every entries*\n"<<endl;
     cout<<endl<<"Package ID: ";
-    packageId=get_num();
+    packageId=get_num(5);
     cout<<endl<<"Package Title: ";
     title=get_text();
     cout<<endl<<"Starting Place: ";
@@ -99,11 +51,11 @@ void Itinerary :: add_Itinerary(){
     cout<<endl<<"Destination: ";
     end=get_text();
     cout<<endl<<"Days: ";
-    days=get_num();
+    days=get_num(2);
     cout<<endl<<"Expense(RS): ";
-    expense=get_num();
-    detail.open("itinerary.txt",ios::out | ios::app);//stores normal details
-    detail<<packageId<<";"<<title<<";"<<start<<";"<<end<<";"<<days<<";"<<expense<<";";    
+    expense=get_num(7);
+    fout.open("itinerary.txt",ios::out | ios::app);//stores normal details
+    fout<<packageId<<";"<<title<<";"<<start<<";"<<end<<";"<<days<<";"<<expense<<";";    
 // list of location and important things are stored in seperate file for convinence
 // package id is store in begining to avoid conflicts
     day=stoi(days);
@@ -111,28 +63,28 @@ void Itinerary :: add_Itinerary(){
     for(int i=0;i<day;i++){
         cout<<endl<<"Destination in Day"<<i+1<<" : ";
         reach=get_text();
-        detail<<"Day "<<i+1<<" : "<<reach<<";";
+        fout<<"Day "<<i+1<<" : "<<reach<<";";
     }
-    detail<<"Important Things: "<<";";
+    fout<<"Important Things: "<<";";
     cout<<endl<<"Important Things: "<<endl;
     cout<<"*Note:Use ';[space]' to seperate sentence\n"<<endl;
     cin.ignore();
     getline(cin,things);
-    detail<<things<<"\n";
-    detail.close();
+    fout<<things<<"\n";
+    fout.close();
 }
 
 void Itinerary :: list_Itinerary(){
     system("cls");
-    fstream list;
-    list.open("itinerary.txt",ios::in);
+    fstream fin;
+    fin.open("itinerary.txt",ios::in);
     vector<string>row;
     string line, word,temp;
     count = 0;
     itineraryHead();
-    while(!list.eof()){
+    while(!fin.eof()){
         row.clear();
-        getline(list,line);
+        getline(fin,line);
         stringstream s(line);
         while(getline(s,word,';'))
         {
@@ -144,11 +96,11 @@ void Itinerary :: list_Itinerary(){
         end=row[3];
         days=row[4];
         expense=row[5];
-        if(!list.eof()){
+        if(!fin.eof()){
             displayItinerary(count);
             count++;
         }
-        if(list.eof()){
+        if(fin.eof()){
             break;
         }
     }
@@ -160,7 +112,7 @@ void Itinerary :: list_Itinerary(){
         cout<<"Press any key to continue....";
         getch();
     }
-    list.close();
+    fin.close();
 }
 
 void Itinerary :: search_Itinerary(){
@@ -170,17 +122,17 @@ void Itinerary :: search_Itinerary(){
     cout<<endl;
     int check = -1;
     string ID;
-    fstream itinerary;
-    itinerary.open("itinerary.txt",ios::in);
+    fstream fin;
+    fin.open("itinerary.txt",ios::in);
     vector<string>row;
     string line, word;
     count == 0;
     cout<<endl<<"Enter Package ID: ";
-    ID=get_num();
+    ID=get_num(5);
     cout<<endl;
-    while(!itinerary.eof()){
+    while(!fin.eof()){
         row.clear();
-        getline(itinerary,line);
+        getline(fin,line);
         count = 0;
         stringstream s(line);
         while(getline(s,word,';'))
@@ -194,7 +146,7 @@ void Itinerary :: search_Itinerary(){
         end=row[3];
         days=row[4];
         expense=row[5];
-        if(!itinerary.eof()){
+        if(!fin.eof()){
             if(ID == packageId){
                 check = 1;
                 cout<<endl<<"Package ID: "<<packageId
@@ -209,7 +161,7 @@ void Itinerary :: search_Itinerary(){
                 exit;
             }
         }
-        if(itinerary.eof()){
+        if(fin.eof()){
             break;
         }
     }
@@ -222,7 +174,7 @@ void Itinerary :: search_Itinerary(){
         getch();
         search_Itinerary();
     }
-    itinerary.close();
+    fin.close();
 }
 
 void Itinerary :: delete_Itinerary(){
@@ -231,7 +183,7 @@ void Itinerary :: delete_Itinerary(){
     cout<<"Delete Package";
     int check=-1;
     cout<<endl<<"Package Id: ";
-    packageId=get_num();
+    packageId=get_num(5);
     cout<<endl;
     fstream fin,fout;
     vector<string>row;
@@ -297,7 +249,7 @@ void Itinerary :: edit_Itinerary(){
     string line, word;
     count == 0;
     cout<<endl<<"Enter Package ID: ";
-    ID=get_num();
+    ID=get_num(5);
     cout<<endl;
     while(!fin.eof()){
         row.clear();
@@ -315,7 +267,7 @@ void Itinerary :: edit_Itinerary(){
                 cout<<endl<<"Fill the below details:"
                 <<endl<<"*NOTE:Use [space] before every entries*\n"<<endl;
                 cout<<endl<<"Package ID: ";
-                packageId=get_num();
+                packageId=get_num(5);
                 cout<<endl<<"Package Title: ";
                 title=get_text();
                 cout<<endl<<"Starting Place: ";
@@ -323,9 +275,9 @@ void Itinerary :: edit_Itinerary(){
                 cout<<endl<<"Destination: ";
                 end=get_text();
                 cout<<endl<<"Days: ";
-                days=get_num();
+                days=get_num(2);
                 cout<<endl<<"Expense(RS): ";
-                expense=get_num();
+                expense=get_num(7);
                 fout<<packageId<<";"<<title<<";"<<start<<";"<<end<<";"<<days<<";"<<expense<<";";
                 day=stoi(days);
                 cout<<endl<<"Add Every day Destination:"<<endl;

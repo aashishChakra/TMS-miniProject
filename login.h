@@ -89,20 +89,7 @@ string login :: get_userId(){
     count=0;
     userId.clear();
     cout<<"USER ID: ";
-    ch=getch();
-    while(ch!=13){
-        if(ch == 8 && count != 0){
-            cout<<"\b";
-            userId.pop_back();
-            count--;
-        }
-        else{
-            cout<<ch;
-            userId.push_back(ch);
-            count++;
-        }
-        ch=getch();
-    }
+    userId = get_num(6);
     return(userId);
 }
 
@@ -110,30 +97,7 @@ string login :: get_fname(){
     count = 0;
     fname.clear();
     cout<<endl<<"First Name: ";
-    ch=getch();
-    do{
-        if(ch == 8 && count != 0){//backspace
-            cout<<"\b";
-            fname.pop_back();
-            count--;
-        }
-        else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122)){//alphabets both upper and lowe case
-            cout<<ch;
-            if(ch>=97 && ch<=122){//converts and store lower to upper case
-                ch-=32;
-                fname.push_back(ch);
-            }
-            else{//upper case
-                fname.push_back(ch);
-            }
-            count++;
-        }
-        ch=getch();
-    }while(ch != 13 && count != 20);
-    if(count == 0){
-        cout<<"Invalid First Name"<<endl<<"Re-Enter ";
-        get_fname();
-    }
+    fname = get_text();
     return(fname);
 }
 
@@ -141,177 +105,135 @@ string login :: get_lname(){
     count = 0;
     lname.clear();
     cout<<endl<<"Last Name: ";
-    ch=getch();
-    do{
-        if(ch == 8 && count != 0){//backspace
-            cout<<"\b";
-            lname.pop_back();
-            count--;
-        }
-        else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122)){//alphabets
-            cout<<ch;
-            if(ch>=97 && ch<=122){//lower to upper case
-                ch-=32;
-                lname.push_back(ch);
-            }
-            else{
-                lname.push_back(ch);
-            }
-            count++;
-        }
-        ch=getch();
-    }while(ch != 13 && count != 20);
-    if(count == 0){
-        cout<<"Invalid Last Name"<<endl<<"Re-Enter ";
-        get_lname();
-    }
+    lname = get_text();
     return(lname);
 }
 
 string login :: get_address(){
-    count = 0;
-    address.clear();
-    cout<<endl<<"Address: ";
-    ch=getch();
-    do{
-        if(ch == 8 and count != 0){
-            cout<<"\b";
-            address.pop_back();
-            count--;
-        }
-        else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122)){//alphabets
-            cout<<ch;
-            if(ch>=97 && ch<=122){
-                ch-=32;
-                address.push_back(ch);
-            }
-            count++;
-        }
-        else if(ch == 32){//space
-            cout<<ch;
-            address.push_back(ch);
-            count++;
-        }
-        else if(ch >= 48 && ch <= 57){//numbers
-            cout<<ch;
-            address.push_back(ch);
-            count++;
-        }
-        else if(ch == 44 || ch == 45){//hyphen and comma
-            cout<<ch;
-            address.push_back(ch);
-            count++;
-        }
+    ADDRESS_TOP:
+        count = 0;
+        address.clear();
+        cout<<endl<<"Address: ";
         ch=getch();
-    }while(ch != 13 && count != 30);
-    if(count == 0){
-        cout<<"Invalid Address"<<endl<<"Re-Enter ";
-        get_address();
-    }
-    return(address);
+        while(ch != 13 ){
+            if(ch == 8 and count != 0){
+                cout<<"\b";
+                address.pop_back();
+                count--;
+            }
+            else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122) && count != 30){//alphabets
+                cout<<ch;
+                if(ch>=97 && ch<=122){
+                    ch-=32;
+                    address.push_back(ch);
+                }
+                count++;
+            }
+            else if(ch == 32 && count != 30){//space
+                cout<<ch;
+                address.push_back(ch);
+                count++;
+            }
+            else if(ch >= 48 && ch <= 57 && count != 30){//numbers
+                cout<<ch;
+                address.push_back(ch);
+                count++;
+            }
+            else if((ch == 44 || ch == 45) && count != 30){//hyphen and comma
+                cout<<ch;
+                address.push_back(ch);
+                count++;
+            }
+            ch=getch();
+        }
+        if(count == 0){
+            cout<<endl<<"Re-Enter: ";
+            goto ADDRESS_TOP;
+        }
+        return(address);
 }
 
 string login :: get_phone(){
-    error = -1;
-    count = 0;
-    phone.clear();
-    cout<<endl<<"Phone: ";
-    ch=getch();
-    while(ch != 13 && count <= 10){//runs until enter is pressed
-        if(ch == 8 && count != 0){//presses backspace
-            if(count == 1 || count == 2){
-                if(error > -1){//checks if pre enterd data were valid or not
-                    error -= 1;
-                }
-            }
-            cout<<"\b";
-            phone.pop_back();
-            count -= 1;
-        }
-        else if(count == 0){//checks first digit 
-            if(ch != 57){//checks first digit is 9 or not
-                error += 1;//error if not 9
-            }
-            cout<<ch;
-            phone.push_back(ch);
-            count += 1;
-        }
-        else if(count == 1){//checks second
-            if(ch != 55 && ch != 56){
-                error += 1;
-            }
-            cout<<ch;
-            phone.push_back(ch);
-            count += 1;
-        }
-        else if(count > 1 && ch >= 48 && ch <= 57){//reads only number
-            cout<<ch;
-            phone.push_back(ch);
-            count += 1;
-        }
+    PHONE_TOP:
+        error = -1;
+        count = 0;
+        phone.clear();
+        cout<<endl<<"Phone: ";
         ch=getch();
-    }
-    if(error != -1 || count != 10){
-        cout<<"Invalid Phone"<<endl<<"Re-Enter ";
-        cout<<"error"<<error<<"\tcount"<<count;
-        get_phone();
-    }
-    return (phone);
+        while(ch != 13 ){//runs until enter is pressed
+            if(ch == 8 && count > 0){//presses backspace
+                if(count == 1 || count == 2){
+                    if(error > -1){//checks if pre enterd data were valid or not
+                        error -= 1;
+                    }
+                }
+                cout<<"\b";
+                phone.pop_back();
+                count -= 1;
+            }
+            else if(count == 0){//checks first digit 
+                if(ch != 57){//checks first digit is 9 or not
+                    error += 1;//error if not 9
+                }
+                cout<<ch;
+                phone.push_back(ch);
+                count += 1;
+            }
+            else if(count == 1){//checks second
+                if(ch != 55 && ch != 56){
+                    error += 1;
+                }
+                cout<<ch;
+                phone.push_back(ch);
+                count += 1;
+            }
+            else if(count > 1 && ch >= 48 && ch <= 57 && count != 10){//reads only number
+                cout<<ch;
+                phone.push_back(ch);
+                count += 1;
+            }
+            ch=getch();
+        }
+        if(error != -1 || count != 10){
+            cout<<endl<<"Re-Enter: ";
+            goto PHONE_TOP;
+        }
+        return (phone);
 }
 
 string login :: get_password(){
-    count=0;
-    password.clear();
-    cout<<endl<<"Password: ";
-    ch=getch();
-    while(count < 25 && ch != 13){
-        if(ch == 8 && count != 0){
-            cout<<"\b";
-            password.pop_back();
-            count--;
+    PASSWORD_TOP:
+        count=0;
+        password.clear();
+        cout<<endl<<"Password: ";
+        ch=getch();
+        while(ch != 13){
+            if(ch == 8 && count != 0){
+                cout<<"\b";
+                password.pop_back();
+                count--;
+            }
+            else if(count != 20){
+                cout<<ch;
+                password.push_back(ch);
+                count++;
+            }
+            ch=getch();
+        }
+        if(count == 0){
+            cout<<endl<<"Re-Enter: ";
+            goto PASSWORD_TOP;
         }
         else{
-            cout<<ch;
-            password.push_back(ch);
-            count++;
+            return(password);
         }
-        ch=getch();
-    }
-    if(count == 0){
-        cout<<"Invalid Password"<<"Re-Enter ";
-        get_password();
-    }
-    return(password);
 }
 
 string login :: get_nationality(){
     count = 0;
     nationality.clear();
     cout<<endl<<"Nationality: ";
-    ch=getch();
-    do{
-        if(ch == 8 && count != 0){//backspace
-            cout<<"\b";
-            nationality.pop_back();
-            count--;
-        }
-        else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122)){//alphabets both upper and lowe case
-            cout<<ch;
-            if(ch>=97 && ch<=122){//converts and store lower to upper case
-                ch-=32;
-                nationality.push_back(ch);
-            }
-            else{//upper case
-                nationality.push_back(ch);
-            }
-            count++;
-        }
-        ch=getch();
-    }while(ch != 13 && count != 20);
-    if(count == 0){
-        cout<<"Invalid First Name"<<endl<<"Re-Enter ";
-        get_nationality();
-    }
+    nationality = get_text();
     return(nationality);
 }
 
@@ -319,24 +241,7 @@ string login :: get_packageId(){
     count=0;
     packageId.clear();
     cout<<endl<<"Package Id: ";
-    ch=getch();
-    while(ch!=13){
-        if(ch == 8 && count != 0){//presses backspace
-            cout<<"\b";
-            packageId.pop_back();
-            count -= 1;
-        }
-        else if(ch >= 48 && ch <= 57){//reads only number
-            cout<<ch;
-            packageId.push_back(ch);
-            count += 1;
-        }
-        ch=getch();
-    }
-    if(count == 0){
-        cout<<endl<<"Invalid Package Id"<<endl;
-        get_packageId();
-    }
+    packageId = get_num(5);
     return(packageId);
 }
 
