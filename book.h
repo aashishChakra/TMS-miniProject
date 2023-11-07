@@ -21,32 +21,36 @@ void book :: displayBooking(int a){//displays the booking details
 }
 
 void book :: insert_booking(){//service for client to add booking
-    system("cls");
-    moveCursor(50,2);
-    cout<<"Fill the following form."<<endl;
+    design();
+    topic = "Booking Form";
+    headline(topic);
+    moveCursor(32,6);
     packageId=get_packageId();
-    cout<<endl;
+    moveCursor(32,8);
     fname=get_fname();
-    cout<<endl;
+    moveCursor(32,10);
     lname=get_lname();
-    cout<<endl;
+    moveCursor(32,12);
     address=get_address();
-    cout<<endl;
+    moveCursor(32,14);
     phone=get_phone();
-    cout<<endl;
+    moveCursor(32,16);
     nationality=get_nationality();
-    cout<<endl;
+    moveCursor(32,18);
     fstream fout;
     fout.open("zbooking_detail.txt",ios::out | ios::app);
     fout<<packageId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<nationality<<"\n";
     fout.close();
+    moveCursor(60,36);
     cout<<"Press any key to continue...";
     getch();
-    system("cls");
-    moveCursor(50,10);
+    design();
+    moveCursor(60,18);
     cout<<"THANK YOU FOR BOOKING WITH US";
-    moveCursor(50,12);
+    moveCursor(50,24);
     cout<<"NOTE: You will receive a call to confirm booking.";
+    moveCursor(60,36);
+    cout<<"Press any key to continue...";
     getch();
 } 
 

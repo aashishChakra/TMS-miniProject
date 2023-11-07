@@ -6,14 +6,14 @@
 string login :: signin(){
     string id,ps;
     SIGNIN_TOP:
-        system("cls");
+        design();
+        topic = "Login";
+        headline(topic);
         userId.clear();
         password.clear();
-        moveCursor(50,2);
-        cout<<"Login";
-        moveCursor(50,10);
+        moveCursor(60,18);
         id=get_userId();
-        moveCursor(50,12);
+        moveCursor(60,20);
         ps=get_password();
         fstream fin;
         fin.open("zlogin.txt",ios::in);
@@ -32,13 +32,12 @@ string login :: signin(){
                 userId=row[1];
                 password=row[2];
                 if( userId == id && password == ps ){
-                    system("cls");
-                    moveCursor(50,2);
-                    cout<<"Login";
-                    moveCursor(50,10);
-                    cout<<"Login Successfull!";
-                    moveCursor(50,15);
-                    cout<<"Press any key to continue...";
+                    design();
+                    headline(topic);
+                    moveCursor(60,18);
+                    cout<<"Login Successfull!!";
+                    moveCursor(60,36);
+                    cout<<"Press any key to continue....";
                     getch();
                     return(userId);
                 }
@@ -48,29 +47,31 @@ string login :: signin(){
             }
         }
         fin.close();
-        system("cls");
-        moveCursor(50,2);
-        cout<<"Login";
-        moveCursor(50,10);
-        cout<<"Invalid attempt!";
-        moveCursor(50,15);
-        cout<<"Press any key to continue...";
+        design();
+        topic = "Login";
+        headline(topic);
+        moveCursor(60,18);
+        cout<<"Invalid attempt!!";
+        moveCursor(60,36);
+        cout<<"Press any key to continue....";
         getch();
         goto SIGNIN_TOP;
 }
 
 void login :: signup(bool post){
     fstream fout;
-    moveCursor(50,2);
-    cout<<"Register"<<endl;
+    design();
+    topic = "Register";
+    headline(topic);
+    moveCursor(32,6);
     fname=get_fname();
-    cout<<endl;
+    moveCursor(32,8);
     lname=get_lname();
-    cout<<endl;
+    moveCursor(32,10);
     address=get_address();
-    cout<<endl;
+    moveCursor(32,12);
     phone=get_phone();
-    cout<<endl;
+    moveCursor(32,14);
     password=get_password();
     power=get_power(post);//true for admin, false for author
     userId=generate_userId(post);
@@ -153,7 +154,7 @@ string login :: get_address(){
             ch=getch();
         }
         if(count == 0){
-            cout<<endl<<"Re-Enter: ";
+            cout<<"\n\t\t\t\tRe-Enter ";
             goto ADDRESS_TOP;
         }
         return(address);
@@ -201,17 +202,17 @@ string login :: get_phone(){
             ch=getch();
         }
         if(error != -1 || count != 10){
-            cout<<endl<<"Re-Enter: ";
+            cout<<"\n\t\t\t\tRe-Enter ";
             goto PHONE_TOP;
         }
         return (phone);
 }
 
 string login :: get_password(){
+        cout<<"Password: ";
     PASSWORD_TOP:
         count=0;
         password.clear();
-        cout<<"Password: ";
         ch=getch();
         while(ch != 13){
             if(ch == 8 && count != 0){
@@ -220,14 +221,13 @@ string login :: get_password(){
                 count--;
             }
             else if(count != 20){
-                cout<<ch;
+                cout<<'*';
                 password.push_back(ch);
                 count++;
             }
             ch=getch();
         }
         if(count == 0){
-            cout<<endl<<"Re-Enter ";
             goto PASSWORD_TOP;
         }
         else{
@@ -275,23 +275,22 @@ string login :: change_password(string id){
     fin.open("zlogin.txt",ios::in);
     fout.open("zlogin2.txt",ios::out | ios::app);
     CHANGE_TOP:
-        system("cls");
-        moveCursor(50,2);
-        cout<<"Change Password"<<endl;
+        design();
+        topic = "Change Password";
+        headline(topic);
         error = -1;
         userId.clear();
-        moveCursor(50,9);
+        moveCursor(60,18);
         userId=l.get_userId();
         vector<string>row;
         string line, word;
         if(id != userId){
-            system("cls");
-            moveCursor(50,2);
-            cout<<"Change Password"<<endl;
-            moveCursor(50,10);
-            cout<<"Invalid UserId!";
-            moveCursor(50,15);
-            cout<<"Press any key to continue...";
+            design();
+            headline(topic);
+            moveCursor(60,18);
+            cout<<"Invalid UserId!!";
+            moveCursor(60,36);
+            cout<<"Press any key to continue....";
             getch();
             goto CHANGE_TOP;
         }
@@ -311,59 +310,54 @@ string login :: change_password(string id){
                     password = row[2];
                     OLD_TOP:
                         old.clear();
-                        moveCursor(50,10);
+                        moveCursor(60,20);
                         cout<<"Current ";
                         old = l.get_password();
                         if(old == password){
                             PASSWORD_TOP:
-                                system("cls");
-                                moveCursor(50,2);
-                                cout<<"Change Password";
-                                moveCursor(50,9);
+                                design();
+                                headline(topic);
+                                moveCursor(60,18);
                                 cout<<"New ";
                                 reset = l.get_password();
-                                moveCursor(50,10);
+                                moveCursor(60,20);
                                 cout<<"Confirm ";
                                 confirm = l.get_password();
                                 if( (reset == confirm) && (old != reset)){
                                     fout<<row[0]<<";"<<row[1]<<";"<<reset<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<"\n";
                                 }
                                 else if(old == reset){
-                                    system("cls");
-                                    moveCursor(50,2);
-                                    cout<<"Change Password";
-                                    moveCursor(50,10);
-                                    cout<<"Old Password Matches New Password!";
-                                    moveCursor(50,15);
-                                    cout<<"Press any key to continue...";
+                                    design();
+                                    headline(topic);
+                                    moveCursor(60,18);
+                                    cout<<"Password Changed Successfully!!";
+                                    moveCursor(60,36);
+                                    cout<<"Press any key to continue....";
                                     getch();
                                     goto PASSWORD_TOP;
                                 }
                                 else{
-                                    system("cls");
-                                    moveCursor(50,2);
-                                    cout<<"Change Password";
-                                    moveCursor(50,10);
-                                    cout<<"Password Mismatch!";
-                                    moveCursor(50,15);
-                                    cout<<"Press any key to continue...";
+                                    design();
+                                    headline(topic);
+                                    moveCursor(60,18);
+                                    cout<<"Password Did Not Match!!";
+                                    moveCursor(60,36);
+                                    cout<<"Press any key to continue....";
                                     getch();
                                     goto PASSWORD_TOP;
                                 }
                         }
                         else{
-                            system("cls");
-                            moveCursor(50,2);
-                            cout<<"Change Password";
-                            moveCursor(50,10);
-                            cout<<"Invalid Password!";
-                            moveCursor(50,15);
+                            design();
+                            headline(topic);
+                            moveCursor(60,18);
+                            cout<<"Invalid Password!!";
+                            moveCursor(60,36);
                             cout<<"Press any key to continue...";
                             getch();
-                            system("cls");
-                            moveCursor(50,2);
-                            cout<<"Change Password";
-                            moveCursor(50,9);
+                            design();
+                            headline(topic);
+                            moveCursor(60,18);
                             cout<<"USER ID: "<<userId;
                             goto OLD_TOP;
                         }
@@ -387,12 +381,11 @@ string login :: change_password(string id){
             goto CHANGE_TOP;
         }
         else{
-            system("cls");
-            moveCursor(50,2);
-            cout<<"Change Password"<<endl;
-            moveCursor(50,10);
+            design();
+            headline(topic);
+            moveCursor(60,18);
             cout<<"Password Changed Successfully!";
-            moveCursor(50,15);
+            moveCursor(60,36);
             cout<<"Press any key to continue...";
             getch();
         }

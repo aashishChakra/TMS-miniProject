@@ -4,36 +4,44 @@
 #include"class.h"
 
 void Itinerary :: itineraryHead(){
-            moveCursor(35,0);
-            cout<<"Package List";
-            moveCursor(1,4);
-            cout<<"Package ID";
-            moveCursor(15,4);
-            cout<<"Package Title";
-            moveCursor(35,4);
-            cout<<"Starting Place";
-            moveCursor(55,4);
-            cout<<"Destination";
-            moveCursor(70,4);
-            cout<<"Days";
-            moveCursor(80,4);
-            cout<<"Expense(RS)";
+    X = 30;
+    ch = 196;
+    moveCursor(70,4);
+    cout<<"Package List";
+    for(int i = 29; i<123; i++){
+        moveCursor(i,5);
+        cout<<ch;
+    }
+    moveCursor(X + 2,6);
+    cout<<"Package ID";
+    moveCursor(X + 17,6);
+    cout<<"Package Title";
+    moveCursor(X + 37,6);
+    cout<<"Starting Place";
+    moveCursor(X + 57,6);
+    cout<<"Destination";
+    moveCursor(X + 72,6);
+    cout<<"Days";
+    moveCursor(X + 82,6);
+    cout<<"Expense(RS)";
 }
 
 void Itinerary :: displayItinerary(int a){
-            a+=5;
-            moveCursor(1,a);
-            cout<<packageId;
-            moveCursor(15,a);
-            cout<<title;
-            moveCursor(35,a);
-            cout<<start;
-            moveCursor(55,a);
-            cout<<end;
-            moveCursor(70,a);
-            cout<<days;
-            moveCursor(80,a);
-            cout<<expense;
+    int x;
+    x = 30;
+    a += 8;
+    moveCursor(x + 2,a);
+    cout<<packageId;
+    moveCursor(x + 17,a);
+    cout<<title;
+    moveCursor(x + 37,a);
+    cout<<start;
+    moveCursor(x + 57,a);
+    cout<<end;
+    moveCursor(x + 72,a);
+    cout<<days;
+    moveCursor(x + 82,a);
+    cout<<expense;
 }
 
 void Itinerary :: add_Itinerary(){
@@ -74,7 +82,7 @@ void Itinerary :: add_Itinerary(){
 }
 
 void Itinerary :: list_Itinerary(){
-    system("cls");
+    design();
     fstream fin;
     fin.open("zitinerary.txt",ios::in);
     vector<string>row;
@@ -103,22 +111,26 @@ void Itinerary :: list_Itinerary(){
             break;
         }
     }
+    fin.close();
     if(count == -1){
-        system("cls");
-        moveCursor(50,10);
-        cout<<"Package Unavailable!";
-        moveCursor(50,15);
+        design();
+        moveCursor(60,18);
+        cout<<"Package Unavailable!!";
+        moveCursor(60,36);
         cout<<"Press any key to continue....";
         getch();
     }
-    fin.close();
+    else{
+        moveCursor(60,36);
+        cout<<"Press any key to continue....";
+        getch();
+    }
 }
 
 void Itinerary :: search_Itinerary(){
-    system("cls");
-    moveCursor(30,2);
-    cout<<"Search Package";
-    cout<<endl;
+    design();
+    topic = "Search Packages";
+    headline(topic);
     int check = -1;
     string ID;
     fstream fin;
@@ -126,7 +138,8 @@ void Itinerary :: search_Itinerary(){
     vector<string>row;
     string line, word;
     count == 0;
-    cout<<endl<<"Enter Package ID: ";
+    moveCursor(32,6);
+    cout<<"Enter Package ID: ";
     ID=get_num(5);
     cout<<endl;
     while(!fin.eof()){
@@ -148,14 +161,24 @@ void Itinerary :: search_Itinerary(){
         if(!fin.eof()){
             if(ID == packageId){
                 check = 1;
-                cout<<endl<<"Package ID: "<<packageId
-                <<endl<<"Package Title: "<<title
-                <<endl<<"Start: "<<start
-                <<endl<<"Destination: "<<end
-                <<endl<<"Number of days: "<<days
-                <<endl<<"Expense: "<<expense<<endl;
+                moveCursor(32,7);
+                cout<<"Package ID: "<<packageId;
+                moveCursor(32,8);
+                cout<<"Package Title: "<<title;
+                moveCursor(32,9);
+                cout<<"Start: "<<start;
+                moveCursor(32,10);
+                cout<<"Destination: "<<end;
+                moveCursor(32,11);
+                cout<<"Number of days: "<<days;
+                moveCursor(32,12);
+                cout<<"Expense: "<<expense;
+                Y=13;
+                moveCursor(32,Y);
                 for(int i=6;i<count;i++){
-                    cout<<row[i]<<"\n";
+                    cout<<row[i];
+                    Y+=1;
+                    moveCursor(32,Y);
                 }
                 exit;
             }
@@ -164,16 +187,21 @@ void Itinerary :: search_Itinerary(){
             break;
         }
     }
+    fin.close();
     if(check == -1){
-        system("cls");
-        moveCursor(50,10);
-        cout<<"Package not Found!";
-        moveCursor(50,15);
+        design();
+        moveCursor(60,18);
+        cout<<"Package not Found!!";
+        moveCursor(60,36);
         cout<<"Press any key to continue....";
         getch();
         search_Itinerary();
     }
-    fin.close();
+    else{
+        moveCursor(60,36);
+        cout<<"Press any key to continue....";
+        getch();
+    }
 }
 
 void Itinerary :: delete_Itinerary(){

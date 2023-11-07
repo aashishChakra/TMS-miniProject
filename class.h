@@ -15,6 +15,8 @@ using namespace std;
 
 char ch;
 int count = 0, error =- 1, choice = 1;
+int X,Y;
+string topic;
 
 void moveCursor(int x, int y)
 {
@@ -88,7 +90,6 @@ string get_text(){
             ch=getch();
         }
         if(count <= 0){
-            cout<<endl<<"Re-Enter: ";
             goto TEXT_TOP;
         }
         else{
@@ -116,7 +117,6 @@ string get_num(int a){//int "a" is length of digit
             ch=getch();
         }
         if(count <= 0){
-            cout<<endl<<"Re_Enter: ";
             goto NUM_TOP;
         }
         else{
@@ -124,6 +124,116 @@ string get_num(int a){//int "a" is length of digit
         }
 }
 
+void design(){
+    system("cls");
+    moveCursor(60,2);
+    cout<<"TRAVEL MANAGEMENT SYSTEM";
+    //Left margin
+    X = 25;
+    Y = 1;
+    ch = 201;
+    moveCursor(X,Y);
+    cout<<ch;
+    for(int i = 0; i<37; i++){
+        if(i == 2){
+            ch = 199;
+            moveCursor(X,Y);
+            cout<<ch;
+        }
+        else if(i == 35){
+            ch = 199;
+            moveCursor(X,Y);
+            cout<<ch;
+        }
+        else{
+            ch = 186;
+            Y += 1;
+            moveCursor(X,Y);
+            cout<<ch;
+        }
+    }
+    Y += 1;
+    moveCursor(X,Y);
+    ch = 200;
+    cout<<ch;
+
+    //right margin
+    X = 126;
+    Y = 1;
+    ch = 187;
+    moveCursor(X,Y);
+    cout<<ch;
+    for(int i = 0; i<37; i++){
+        if(i == 2){
+            ch = 182;
+            moveCursor(X,Y);
+            cout<<ch;
+        }
+        else if(i == 35){
+            ch = 182;
+            moveCursor(X,Y);
+            cout<<ch;
+        }
+        else{
+            ch = 186;
+            Y += 1;
+            moveCursor(X,Y);
+            cout<<ch;
+        }
+    }
+    Y+=1;
+    moveCursor(X,Y);
+    ch = 188;
+    cout<<ch;
+    
+    //Top Margin
+    X = 25;
+    Y = 1;
+    ch = 205;
+    for(int i = 0; i<100; i++){
+        X += 1;
+        moveCursor(X,Y);
+        cout<<ch;
+    }
+
+    //Bottom Margin
+    X = 25;
+    Y = 37;
+    for(int i = 0; i < 100; i++){
+        X += 1;
+        moveCursor(X,Y);
+        cout<<ch;
+    }   
+
+    //headder divider
+    X = 25;
+    Y = 3;
+    for(int i = 0; i < 100; i++){
+        ch = 196;
+        X += 1;
+        moveCursor(X,Y);
+        cout<<ch;
+    } 
+    //footer divider
+    X = 25;
+    Y = 35;
+    for(int i = 0; i < 100; i++){
+        ch = 196;
+        X += 1;
+        moveCursor(X,Y);
+        cout<<ch;
+    } 
+}
+
+void headline(string& title){
+    ch = 196;
+    moveCursor(70,4);
+    cout<<title;
+    for(int i = 29; i<123; i++){
+        moveCursor(i,5);
+        cout<<ch;
+    }
+}
 #endif
  /*
  package id =5
