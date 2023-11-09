@@ -27,7 +27,7 @@ class login{
     protected:
         string userId, password, fname, lname, address, phone, email, power,nationality,packageId;
     public:
-        void signup(bool);
+        void signup();
         string signin();
         string get_userId();
         string get_password();
@@ -35,11 +35,12 @@ class login{
         string get_lname();
         string get_address();
         string get_phone();
-        string get_nationality();
-        string get_packageId();
+        // string get_nationality();
+        // string get_packageId();
         string change_password(string);
-        string get_power(bool );
-        string generate_userId(bool);
+        string get_power();
+        string generate_code(string);
+        friend class Itinerary;
 };
 
 class book : public login{
@@ -234,6 +235,52 @@ void headline(string& title){
         cout<<ch;
     }
 }
+
+bool checkId(string id, string operation){    
+    fstream fin;
+    string userId;
+    error = -1;
+    if(operation == "userId"){
+        fin.open("zlogin.txt",ios::in);
+    }
+    else if(operation == "package"){
+        fin.open("zitinerary.txt",ios::in);
+    }
+    vector<string>row;
+    string line, word,temp;
+    while(!fin.eof()){
+        row.clear();
+        getline(fin,line);
+        stringstream s(line);
+        while(getline(s,word,';'))
+        {
+            row.push_back(word);
+        }
+        if(!fin.eof()){
+            if(operation == "userId"){//gets user Id
+                userId=row[1];
+            }
+            else if(operation == "package"){//gets package Id
+                userId=row[0];
+            }
+            if(id == userId){
+                error = 1;
+                break;
+            }
+        }
+        if(fin.eof()){
+            break;
+        }
+    }
+    fin.close();
+    if(error == 1){//id found
+        return(true);
+    }
+    else{//id not found
+        return(false);
+    }
+}
+
 #endif
  /*
  package id =5

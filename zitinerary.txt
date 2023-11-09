@@ -3,3 +3,4 @@
 784;GORKHA;JUMLA;SY;1;5000;Day 1 : PLACE1;Important Things: ; water; cap
 102;POKHARA;JOMSON;SY;1;3000;Day 1 : PLACE1;Important Things: ; water; jacket
 886;KATHMANDU;HETAUDA;SY;1;1200;Day 1 : PLACE1;Important Things: ; water; sun glass
+AARC1561;POKHARA;POKHARA;POLKARA;1;85476;Day 1 : HOME;Important Things: ;chocolate; kite; ok;

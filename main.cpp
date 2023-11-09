@@ -51,19 +51,21 @@ int admin(string id){
                 break;
             }
             case 6:{
-                system("cls");
                 choice = 0;
-                moveCursor(50,15);
-                cout<<"Press any Key to Continue...";
+                design();
+                moveCursor(60,18);
+                cout<<"Thank You For Joining With Us!!";
+                moveCursor(60,36);
+                cout<<"Press any Key to continue....";
                 getch();
                 break;
             }
             default:{
-                system("cls");
-                moveCursor(50,10);
-                cout<<"Invalid Choice!";
-                moveCursor(50,15);
-                cout<<"Press any Key to Continue...";
+                design();
+                moveCursor(60,18);
+                cout<<"Invalid Choice!!";
+                moveCursor(60,36);
+                cout<<"Press any Key to continue....";
                 getch();
                 break;
             }
@@ -94,7 +96,7 @@ int client(){
                 i.list_Itinerary();
                 SEARCH:
                     design();
-                    moveCursor(50,18);
+                    moveCursor(60,18);
                     cout<<"Do you want to view detail of package(Y/N): ";
                     ch=getch();
                     cout<<ch;
@@ -119,7 +121,7 @@ int client(){
                     }
                 BOOK1:
                     design();
-                    moveCursor(50,18);
+                    moveCursor(60,18);
                     cout<<"Do you want to book this package(Y/N): ";
                     ch1=getch();
                     cout<<ch1;
@@ -175,10 +177,12 @@ int client(){
                     }
             }
             case 3:{//exit
-                design();
                 choice = 0;
+                design();
+                moveCursor(60,18);
+                cout<<"Thank You For Joining With Us!!";
                 moveCursor(60,36);
-                cout<<"Press any Key to Continue....";
+                cout<<"Press any Key to continue....";
                 getch();
                 break;
             }
@@ -187,7 +191,7 @@ int client(){
                 moveCursor(60,18);
                 cout<<"Invalid Choice!!";
                 moveCursor(60,36);
-                cout<<"Press any Key to Continue....";
+                cout<<"Press any Key to continue....";
                 getch();
                 break;
             }
@@ -233,7 +237,7 @@ int main(){
             }
             case 3:{//register
                 system("cls");
-                l.signup(false);
+                l.signup();
                 choice = 3;
                 break;
             }
@@ -247,7 +251,7 @@ int main(){
                 moveCursor(60,18);
                 cout<<"Invalid Choice!!";
                 moveCursor(60,36);
-                cout<<"Press any Key to Continue....";
+                cout<<"Press any Key to continue....";
             }
         }
     }
@@ -255,7 +259,7 @@ int main(){
     moveCursor(60,18);
     cout<<"Thank you for choosing us!!";
     moveCursor(60,36);
-    cout<<"Press any Key to Continue....";
+    cout<<"Press any Key to continue....";
     getch();
     return 0;
 }

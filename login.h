@@ -58,7 +58,7 @@ string login :: signin(){
         goto SIGNIN_TOP;
 }
 
-void login :: signup(bool post){
+void login :: signup(){
     fstream fout;
     design();
     topic = "Register";
@@ -73,22 +73,26 @@ void login :: signup(bool post){
     phone=get_phone();
     moveCursor(32,14);
     password=get_password();
-    power=get_power(post);//true for admin, false for author
-    userId=generate_userId(post);
+    power=get_power();
+    do{
+        userId=generate_code("userId");
+    }while(checkId(userId, "userId"));
     fout.open("zlogin.txt",ios::out | ios:: app);
     fout<<power<<";"<<userId<<";"<<password<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<"\n";
     fout.close();
-    cout<<endl<<endl<<"Please Note Your User Id for Future Login."<<endl<<"Your User ID is: "<<userId<<endl;
+    design();
+    headline(topic);
+    moveCursor(60,18);
+    cout<<"Please Note Your User Id for Future Login.";
+    moveCursor(60,20);
+    cout<<"Your User ID is: "<<userId;
+    moveCursor(60,36);
+    cout<<"Press any key to continue....";
+    getch();
 }
 
-string login :: get_power(bool post){
-    power.clear();
-    if(post==true){
-        power=  "AUTHOR";
-    }
-    else if(post == false){
-        power = "ADMIN";
-    }
+string login :: get_power(){
+    power = "ADMIN";
     return (power);
 }
 
@@ -235,41 +239,44 @@ string login :: get_password(){
         }
 }
 
-string login :: get_nationality(){
-    count = 0;
-    nationality.clear();
-    cout<<"Nationality: ";
-    nationality = get_text();
-    return(nationality);
-}
+// string login :: get_nationality(){
+//     count = 0;
+//     nationality.clear();
+//     cout<<"Nationality: ";
+//     nationality = get_text();
+//     return(nationality);
+// }
 
-string login :: get_packageId(){
-    count=0;
-    packageId.clear();
-    cout<<"Package Id: ";
-    packageId = get_num(5);
-    return(packageId);
-}
+// string login :: get_packageId(){
+//     count=0;
+//     packageId.clear();
+//     cout<<"Package Id: ";
+//     packageId = get_num(5);
+//     return(packageId);
+// }
 
-string login :: generate_userId(bool post){
+string login :: generate_code(string operation){
     //here power is already stored from signup
     int id;
     login l;
-    userId.clear();
-    if(post){//admin
-        srand(time(0));
-        id=870000+rand()%10000;
-    }
-    else if(!post){//author
+    if(operation == "userId"){
+        userId.clear();
         srand(time(0));
         id=370000+rand()%10000;
+        userId=to_string(id);
     }
-    userId=to_string(id);
+    else if(operation == "package"){
+        userId.clear();
+        srand(time(0));
+        id=1000+rand()%1000;
+        userId=to_string(id);
+        userId = "AARC" + userId;
+    }
     return(userId);
 }
 
-string login :: change_password(string id){
-    string old, reset, confirm;
+string login :: change_password(string passedId){
+    string oldPassword, newPassword, confirmPassword;
     login l;
     fstream fin, fout;
     fin.open("zlogin.txt",ios::in);
@@ -284,7 +291,7 @@ string login :: change_password(string id){
         userId=l.get_userId();
         vector<string>row;
         string line, word;
-        if(id != userId){
+        if(userId != passedId){
             design();
             headline(topic);
             moveCursor(60,18);
@@ -294,83 +301,85 @@ string login :: change_password(string id){
             getch();
             goto CHANGE_TOP;
         }
-        while(!fin.eof()){
-            row.clear();
-            getline(fin,line);
-            count = 0;
-            stringstream s(line);
-            while(getline(s,word,';'))
-            {
-                row.push_back(word);
-                count ++;
-            }
-            if(!fin.eof()){
-                if(userId == row[1]){
-                    error ++;
-                    password = row[2];
-                    OLD_TOP:
-                        old.clear();
-                        moveCursor(60,20);
-                        cout<<"Current ";
-                        old = l.get_password();
-                        if(old == password){
-                            PASSWORD_TOP:
+        else{
+            while(!fin.eof()){
+                row.clear();
+                getline(fin,line);
+                count = 0;
+                stringstream s(line);
+                while(getline(s,word,';'))
+                {
+                    row.push_back(word);
+                    count ++;
+                }
+                if(!fin.eof()){
+                    if(userId == row[1]){
+                        error ++;
+                        password = row[2];
+                        OLD_TOP:
+                            oldPassword.clear();
+                            moveCursor(60,20);
+                            cout<<"Current ";
+                            oldPassword = l.get_password();
+                            if(oldPassword == password){
+                                PASSWORD_TOP:
+                                    design();
+                                    headline(topic);
+                                    moveCursor(60,18);
+                                    cout<<"New ";
+                                    newPassword = l.get_password();
+                                    moveCursor(60,20);
+                                    cout<<"Confirm ";
+                                    confirmPassword = l.get_password();
+                                    if( (newPassword == confirmPassword) && (oldPassword != newPassword)){
+                                        fout<<row[0]<<";"<<row[1]<<";"<<newPassword<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<"\n";
+                                    }
+                                    else if(oldPassword == newPassword){
+                                        design();
+                                        headline(topic);
+                                        moveCursor(60,18);
+                                        cout<<"Password Maatched With Old Password!!";
+                                        moveCursor(60,36);
+                                        cout<<"Press any key to continue....";
+                                        getch();
+                                        goto PASSWORD_TOP;
+                                    }
+                                    else{
+                                        design();
+                                        headline(topic);
+                                        moveCursor(60,18);
+                                        cout<<"Password Did Not Match!!";
+                                        moveCursor(60,36);
+                                        cout<<"Press any key to continue....";
+                                        getch();
+                                        goto PASSWORD_TOP;
+                                    }
+                            }
+                            else{
                                 design();
                                 headline(topic);
                                 moveCursor(60,18);
-                                cout<<"New ";
-                                reset = l.get_password();
-                                moveCursor(60,20);
-                                cout<<"Confirm ";
-                                confirm = l.get_password();
-                                if( (reset == confirm) && (old != reset)){
-                                    fout<<row[0]<<";"<<row[1]<<";"<<reset<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<"\n";
-                                }
-                                else if(old == reset){
-                                    design();
-                                    headline(topic);
-                                    moveCursor(60,18);
-                                    cout<<"Password Changed Successfully!!";
-                                    moveCursor(60,36);
-                                    cout<<"Press any key to continue....";
-                                    getch();
-                                    goto PASSWORD_TOP;
-                                }
-                                else{
-                                    design();
-                                    headline(topic);
-                                    moveCursor(60,18);
-                                    cout<<"Password Did Not Match!!";
-                                    moveCursor(60,36);
-                                    cout<<"Press any key to continue....";
-                                    getch();
-                                    goto PASSWORD_TOP;
-                                }
-                        }
-                        else{
-                            design();
-                            headline(topic);
-                            moveCursor(60,18);
-                            cout<<"Invalid Password!!";
-                            moveCursor(60,36);
-                            cout<<"Press any key to continue...";
-                            getch();
-                            design();
-                            headline(topic);
-                            moveCursor(60,18);
-                            cout<<"USER ID: "<<userId;
-                            goto OLD_TOP;
-                        }
-                }
-                else{
-                    for(int i = 0; i<count;i++){
-                        fout<<row[i]<<";";
+                                cout<<"Invalid Password!!";
+                                moveCursor(60,36);
+                                cout<<"Press any key to continue....";
+                                getch();
+                                design();
+                                headline(topic);
+                                moveCursor(60,18);
+                                cout<<"USER ID: "<<userId;
+                                goto OLD_TOP;
+                            }
                     }
-                    fout<<"\n";
+                    else{
+                        for(int i = 0; i<count;i++){
+                            fout<<row[i]<<";";
+                        }
+                        fout<<"\n";
+                    }
                 }
-            }
-            if(fin.eof()){
-                break;
+                if(fin.eof()){
+                    break;
+                }
             }
         }
         fin.close();
@@ -386,7 +395,7 @@ string login :: change_password(string id){
             moveCursor(60,18);
             cout<<"Password Changed Successfully!";
             moveCursor(60,36);
-            cout<<"Press any key to continue...";
+            cout<<"Press any key to continue....";
             getch();
         }
 }

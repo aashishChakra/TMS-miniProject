@@ -5,13 +5,6 @@
 
 void Itinerary :: itineraryHead(){
     X = 30;
-    ch = 196;
-    moveCursor(70,4);
-    cout<<"Package List";
-    for(int i = 29; i<123; i++){
-        moveCursor(i,5);
-        cout<<ch;
-    }
     moveCursor(X + 2,6);
     cout<<"Package ID";
     moveCursor(X + 17,6);
@@ -27,30 +20,32 @@ void Itinerary :: itineraryHead(){
 }
 
 void Itinerary :: displayItinerary(int a){
-    int x;
-    x = 30;
+    X = 30;
     a += 8;
-    moveCursor(x + 2,a);
+    moveCursor(X + 2,a);
     cout<<packageId;
-    moveCursor(x + 17,a);
+    moveCursor(X + 17,a);
     cout<<title;
-    moveCursor(x + 37,a);
+    moveCursor(X + 37,a);
     cout<<start;
-    moveCursor(x + 57,a);
+    moveCursor(X + 57,a);
     cout<<end;
-    moveCursor(x + 72,a);
+    moveCursor(X + 72,a);
     cout<<days;
-    moveCursor(x + 82,a);
+    moveCursor(X + 82,a);
     cout<<expense;
 }
 
 void Itinerary :: add_Itinerary(){
     fstream fout;
+    login l;
     system("cls");
     cout<<"Fill the below details:"
     <<endl<<"*NOTE:Use [space] before every entries*\n"<<endl;
-    cout<<endl<<"Package ID: ";
-    packageId=get_num(5);
+    do{
+        packageId=l.generate_code("package");
+    }while(checkId(packageId,"package"));
+
     cout<<endl<<"Package Title: ";
     title=get_text();
     cout<<endl<<"Starting Place: ";
@@ -82,7 +77,9 @@ void Itinerary :: add_Itinerary(){
 }
 
 void Itinerary :: list_Itinerary(){
+    topic = "List Itinerary";
     design();
+    headline(topic);
     fstream fin;
     fin.open("zitinerary.txt",ios::in);
     vector<string>row;
