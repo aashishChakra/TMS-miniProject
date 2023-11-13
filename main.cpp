@@ -26,7 +26,6 @@ int admin(string id){
         cin>>choice;
         switch(choice){
             case 1:{
-                system("cls");
                 a.add_Itinerary();
                 break;
             }
@@ -54,10 +53,8 @@ int admin(string id){
                 choice = 0;
                 design();
                 moveCursor(60,18);
-                cout<<"Thank You For Joining With Us!!";
-                moveCursor(60,36);
-                cout<<"Press any Key to continue....";
-                getch();
+                display = "Thank You For Joining With Us!!";
+                print_slow(display);
                 break;
             }
             default:{
@@ -179,11 +176,9 @@ int client(){
             case 3:{//exit
                 choice = 0;
                 design();
+                display = "Thank You For Joining With Us!!";
                 moveCursor(60,18);
-                cout<<"Thank You For Joining With Us!!";
-                moveCursor(60,36);
-                cout<<"Press any Key to continue....";
-                getch();
+                print_slow(display);
                 break;
             }
             default:{
@@ -206,10 +201,8 @@ int main(){
     choice=1;
     design();
     moveCursor(50,18);
-    cout<<"WELCOME TO AARC TRAVEL MANAGEMENT SYSTEM....";
-    moveCursor(60,36);
-    cout<<"Press any key to continue....";
-    getch();
+    display = "WELCOME TO AARC TRAVEL MANAGEMENT SYSTEM....";
+    print_slow(display);
     while(choice != 0){
         design();
         moveCursor(60,14);
@@ -252,14 +245,13 @@ int main(){
                 cout<<"Invalid Choice!!";
                 moveCursor(60,36);
                 cout<<"Press any Key to continue....";
+                getch();
             }
         }
     }
     design();
+    display = "Thank you for choosing us!!";
     moveCursor(60,18);
-    cout<<"Thank you for choosing us!!";
-    moveCursor(60,36);
-    cout<<"Press any Key to continue....";
-    getch();
+    print_slow(display);
     return 0;
 }

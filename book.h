@@ -81,6 +81,7 @@ void book :: check_booking(){//service for admin to see list of booking
             break;
         }
     }
+    fin.close();
     if(count == -1){
         design();
         headline(topic);
@@ -90,8 +91,11 @@ void book :: check_booking(){//service for admin to see list of booking
         cout<<"Press any key to continue....";
         getch();
     }
-    fin.close();
-    getch();
+    else{
+        moveCursor(60,36);
+        cout<<"Press any key to continue....";
+        getch();
+    }
 }
 
 void book :: bookingHead(){//prints the head in booking 

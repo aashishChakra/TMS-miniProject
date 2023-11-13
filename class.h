@@ -10,13 +10,15 @@
 #include<fstream>
 #include<sstream>
 #include<graphics.h>
+#include<windows.h>
+#include<unistd.h>
 
 using namespace std;
 
 char ch;
 int count = 0, error =- 1, choice = 1;
 int X,Y;
-string topic;
+string topic,display;
 
 void moveCursor(int x, int y)
 {
@@ -278,6 +280,13 @@ bool checkId(string id, string operation){
     }
     else{//id not found
         return(false);
+    }
+}
+
+void print_slow(string& display){
+    for(int i =0;i<display.length();i++){
+        cout<<display[i];
+        usleep(88000);
     }
 }
 

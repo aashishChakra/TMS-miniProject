@@ -37,43 +37,61 @@ void Itinerary :: displayItinerary(int a){
 }
 
 void Itinerary :: add_Itinerary(){
+    topic="Add Itinerary";
     fstream fout;
     login l;
-    system("cls");
-    cout<<"Fill the below details:"
-    <<endl<<"*NOTE:Use [space] before every entries*\n"<<endl;
+    design();
+    headline(topic);
+    moveCursor(60,6);
+    cout<<"Fill the below details:";
+    moveCursor(50,7);
+    cout<<"*NOTE:Use [space] before every entries*";
     do{
         packageId=l.generate_code("package");
     }while(checkId(packageId,"package"));
-
-    cout<<endl<<"Package Title: ";
+    moveCursor(32,8);
+    cout<<"Package Title: ";
     title=get_text();
-    cout<<endl<<"Starting Place: ";
+    moveCursor(32,10);
+    cout<<"Starting Place: ";
     start=get_text();
-    cout<<endl<<"Destination: ";
+    moveCursor(32,12);
+    cout<<"Destination: ";
     end=get_text();
-    cout<<endl<<"Days: ";
-    days=get_num(2);
-    cout<<endl<<"Expense(RS): ";
+    moveCursor(32,14);
+    cout<<"Days: ";
+    days=get_num(1);
+    moveCursor(32,16);
+    cout<<"Expense(RS): ";
     expense=get_num(7);
     fout.open("zitinerary.txt",ios::out | ios::app);//stores normal details
     fout<<packageId<<";"<<title<<";"<<start<<";"<<end<<";"<<days<<";"<<expense<<";";    
 // list of location and important things are stored in seperate file for convinence
 // package id is store in begining to avoid conflicts
     day=stoi(days);
-    cout<<endl<<"Add Every day Destination:"<<endl;
+    moveCursor(32,18);
+    cout<<"Add Every day Destination:";
     for(int i=0;i<day;i++){
-        cout<<endl<<"Destination in Day"<<i+1<<" : ";
+        
+        cout<<"\n \t\t\t\t Destination in Day"<<i+1<<" : ";
         reach=get_text();
         fout<<"Day "<<i+1<<" : "<<reach<<";";
     }
     fout<<"Important Things: "<<";";
-    cout<<endl<<"Important Things: "<<endl;
-    cout<<"*Note:Use '; [space]' to seperate sentence\n"<<endl;
+    cout<<"\n\t\t\t\t*Note:Use '; [space]' to seperate sentence\n\n\t\t\t\t";
+    cout<<"\n\n\t\t\t\tImportant Things:";
     cin.ignore();
     getline(cin,things);
     fout<<things<<"\n";
     fout.close();
+    moveCursor(60,36);
+    cout<<"Press any key to continue....";
+    getch();
+    design();
+    headline(topic);
+    moveCursor(60,18);
+    display = "Itinerary Added Successfully";
+    print_slow(display);
 }
 
 void Itinerary :: list_Itinerary(){
