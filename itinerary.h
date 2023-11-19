@@ -45,10 +45,10 @@ void Itinerary :: add_Itinerary(){
     moveCursor(60,6);
     cout<<"Fill the below details:";
     moveCursor(50,7);
-    cout<<"*NOTE:Use [space] before every entries*";
+    // cout<<"*NOTE:Use [space] before every entries*";
     do{
-        packageId=l.generate_code("package");
-    }while(checkId(packageId,"package"));
+        packageId=generateCode("package");
+    }while(checkCode(packageId,"package"));
     moveCursor(32,8);
     cout<<"Package Title: ";
     title=get_text();
@@ -78,10 +78,12 @@ void Itinerary :: add_Itinerary(){
         fout<<"Day "<<i+1<<" : "<<reach<<";";
     }
     fout<<"Important Things: "<<";";
-    cout<<"\n\t\t\t\t*Note:Use '; [space]' to seperate sentence\n\n\t\t\t\t";
-    cout<<"\n\n\t\t\t\tImportant Things:";
+    cout<<"\n\t\t\t\t\t***Note:Use '; ' to seperate sentence***\t\t\t\t";
+    cout<<"\n\t\t\t\tImportant Things:";
     cin.ignore();
     getline(cin,things);
+    // display = toupper(things);
+    things = upper(things);
     fout<<things<<"\n";
     fout.close();
     moveCursor(60,36);
@@ -94,16 +96,17 @@ void Itinerary :: add_Itinerary(){
     print_slow(display);
 }
 
-void Itinerary :: list_Itinerary(){
+string Itinerary :: list_Itinerary(string source, string destination, string type){//lists all the packages in the system
     topic = "List Itinerary";
-    design();
-    headline(topic);
     fstream fin;
+    choice = -1;
     fin.open("zitinerary.txt",ios::in);
     vector<string>row;
     string line, word,temp;
-    count = 0;
+    design();
+    headline(topic);
     itineraryHead();
+    count = -1;
     while(!fin.eof()){
         row.clear();
         getline(fin,line);
@@ -119,8 +122,18 @@ void Itinerary :: list_Itinerary(){
         days=row[4];
         expense=row[5];
         if(!fin.eof()){
-            displayItinerary(count);
-            count++;
+            if(type == "general"){
+                if(source == title || source == start || destination == end){
+                    displayItinerary(count);
+                    count+=1;
+                }
+            }
+            else if (type == "specific" || type == "book"){
+                if(source == start && destination == end){
+                displayItinerary(count);
+                count += 1;
+                }
+            }
         }
         if(fin.eof()){
             break;
@@ -128,35 +141,89 @@ void Itinerary :: list_Itinerary(){
     }
     fin.close();
     if(count == -1){
-        design();
-        moveCursor(60,18);
-        cout<<"Package Unavailable!!";
-        moveCursor(60,36);
-        cout<<"Press any key to continue....";
-        getch();
+        while(choice != 0){
+            design();
+            headline(topic);
+            moveCursor(60,8);
+            cout<<"**** Package Not Found!! ***";
+            moveCursor(60,18);
+            cout<<"1. Try Again";
+            moveCursor(60,20);
+            cout<<"2. Exit";
+            moveCursor(60,36);
+            cout<<"Enter Your Choice: ";
+            cin>>choice;
+            switch(choice){
+                case 1:{
+                    choice = -1;
+                    return("error");
+                    break;
+                }
+                case 2:{
+                    source = "empty";
+                    choice = 0;
+                    break;
+                }
+                default:{
+                    choice = -1;
+                    break;
+                }
+            }
+        }
     }
-    else{
-        moveCursor(60,36);
-        cout<<"Press any key to continue....";
-        getch();
-    }
+    choice = -1;
+    return (source);
 }
 
-void Itinerary :: search_Itinerary(){
-    design();
-    topic = "Search Packages";
-    headline(topic);
-    int check = -1;
-    string ID;
+string Itinerary :: search_Itinerary(string type){//purano search
+    int check;
     fstream fin;
+    string ID,source,destination;
+    topic = "Search Packages";
+SEARCH_TOP_A:
+    design();
+    headline(topic);
+    if(type == "general"){
+        moveCursor(60,20);
+        cout<<"Enter Package Title: ";
+        source=get_text();
+        destination = source;
+    }
+    else if(type == "specific" || type == "book"){
+        moveCursor(60,20);
+        cout<<"Enter Starting Place: ";
+        source=get_text();
+        moveCursor(60,22);
+        cout<<"Enter Destination: ";
+        destination=get_text();
+    }
+SEARCH_TOP_B:
+    ID = list_Itinerary(source, destination,type);
+    topic = "Search Packages";
+    if(ID == "error"){
+        goto SEARCH_TOP_A;
+    }
+    else if(ID == "empty"){
+        ID = "404";
+        return (ID);
+    }
+    moveCursor(2,18);
+    cout<<"Enter [EXIT] to exit";
+    moveCursor(60,36);
+    cout<<"Enter Package ID: ";
+    cin>>ID;
+    ID=upper(ID);
+    if(ID == "EXIT"){
+        ID = "404";
+        return (ID);
+    }
+    count = -1;
+    design();
+    headline(topic);
+    check = -1;
     fin.open("zitinerary.txt",ios::in);
     vector<string>row;
     string line, word;
-    count == 0;
-    moveCursor(32,6);
-    cout<<"Enter Package ID: ";
-    ID=get_num(5);
-    cout<<endl;
     while(!fin.eof()){
         row.clear();
         getline(fin,line);
@@ -174,28 +241,55 @@ void Itinerary :: search_Itinerary(){
         days=row[4];
         expense=row[5];
         if(!fin.eof()){
-            if(ID == packageId){
-                check = 1;
-                moveCursor(32,7);
-                cout<<"Package ID: "<<packageId;
-                moveCursor(32,8);
-                cout<<"Package Title: "<<title;
-                moveCursor(32,9);
-                cout<<"Start: "<<start;
-                moveCursor(32,10);
-                cout<<"Destination: "<<end;
-                moveCursor(32,11);
-                cout<<"Number of days: "<<days;
-                moveCursor(32,12);
-                cout<<"Expense: "<<expense;
-                Y=13;
-                moveCursor(32,Y);
-                for(int i=6;i<count;i++){
-                    cout<<row[i];
-                    Y+=1;
+            if(type == "general"){
+                if((ID == packageId) && (source == title || source == start || destination == end)){
+                    check = 1;
+                    moveCursor(32,7);
+                    cout<<"Package ID: "<<packageId;
+                    moveCursor(32,8);
+                    cout<<"Package Title: "<<title;
+                    moveCursor(32,9);
+                    cout<<"Start: "<<start;
+                    moveCursor(32,10);
+                    cout<<"Destination: "<<end;
+                    moveCursor(32,11);
+                    cout<<"Number of days: "<<days;
+                    moveCursor(32,12);
+                    cout<<"Expense: "<<expense;
+                    Y=13;
                     moveCursor(32,Y);
+                    for(int i=6;i<count;i++){
+                        cout<<row[i];
+                        Y+=1;
+                        moveCursor(32,Y);
+                    }
+                    exit;
                 }
-                exit;
+            }
+            else if(type == "specific" || type == "book"){
+                if(ID == packageId && source == start && destination == end){
+                    check = 1;
+                    moveCursor(32,7);
+                    cout<<"Package ID: "<<packageId;
+                    moveCursor(32,8);
+                    cout<<"Package Title: "<<title;
+                    moveCursor(32,9);
+                    cout<<"Start: "<<start;
+                    moveCursor(32,10);
+                    cout<<"Destination: "<<end;
+                    moveCursor(32,11);
+                    cout<<"Number of days: "<<days;
+                    moveCursor(32,12);
+                    cout<<"Expense: "<<expense;
+                    Y=13;
+                    moveCursor(32,Y);
+                    for(int i=6;i<count;i++){
+                        cout<<row[i];
+                        Y+=1;
+                        moveCursor(32,Y);
+                    }
+                    exit;
+                }
             }
         }
         if(fin.eof()){
@@ -204,36 +298,115 @@ void Itinerary :: search_Itinerary(){
     }
     fin.close();
     if(check == -1){
-        design();
-        moveCursor(60,18);
-        cout<<"Package not Found!!";
-        moveCursor(60,36);
-        cout<<"Press any key to continue....";
-        getch();
-        search_Itinerary();
+        while(choice != 0){
+            design();
+            headline(topic);
+            moveCursor(60,8);
+            cout<<"**** Package Not Found!!";
+            moveCursor(60,18);
+            cout<<"1. Search Menu";
+            moveCursor(60,20);
+            cout<<"2. List";
+            moveCursor(60,22);
+            cout<<"3. Exit";
+            moveCursor(60,36);
+            cout<<"Enter Your Choice: ";
+            cin>>choice;
+            switch(choice){
+                case 1:{
+                    goto SEARCH_TOP_A;
+                    break;
+                }
+                case 2:{
+                    design();
+                    headline(topic);
+                    goto SEARCH_TOP_B;
+                    break;
+                }
+                case 3:{
+                    ID = "404";
+                    choice = -1;
+                    return (ID);
+                }
+                default:{
+                    choice = -1;
+                    break;
+                }
+            }
+        }
     }
     else{
         moveCursor(60,36);
         cout<<"Press any key to continue....";
         getch();
+        if(type == "specific" || type == "general"){
+            while(choice != 0){
+                design();
+                headline(topic);
+                moveCursor(60,18);
+                cout<<"1. New Search";
+                moveCursor(60,20);
+                cout<<"2. List";
+                moveCursor(60,22);
+                cout<<"3. Exit";
+                moveCursor(60,36);
+                cout<<"Enter Your Choice: ";
+                cin>>choice;
+                switch(choice){
+                    case 1:{
+                        design();
+                        headline(topic);
+                        goto SEARCH_TOP_A;
+                        choice = -1;
+                        break;
+                    }
+                    case 2:{
+                        goto SEARCH_TOP_B;
+                        choice = -1;
+                        break;
+                    }
+                    case 3:{
+                        choice = -1;
+                        return (ID);
+                    }
+                    default:{
+                        choice = -1;
+                        break;
+                    }
+                }
+            }
+        }
     }
+    choice = -1;
+    return (ID);
 }
 
-void Itinerary :: delete_Itinerary(){
-    system("cls");
-    moveCursor(30,2);
-    cout<<"Delete Package";
-    int check=-1;
-    cout<<endl<<"Package Id: ";
-    packageId=get_num(5);
-    cout<<endl;
+string Itinerary :: delete_Itinerary(){
+    topic = "Delete Itinerary";
+    string type = "general";
     fstream fin,fout;
     vector<string>row;
     string line, word;
+    int check=-1;
+    string search, ID;
+DELETE_TOP:
+    design();
+    headline(topic);
+    moveCursor(60,20);
+    cout<<"Enter Package Title: ";
+    search = get_text();
+    search = list_Itinerary(search,search,type);
+    if(search == "empty"){
+        return (ID);
+    }
+    moveCursor(60,36);
+    cout<<"Enter Package ID: ";
+    cin>>ID;
+    ID=upper(ID);
     fin.open("zitinerary.txt",ios::in);
     fout.open("zitinerary2.txt",ios::out);
+    check =- 1;
     while(!fin.eof()){
-        check=1;
         row.clear();
         getline(fin,line);
         stringstream s(line);
@@ -242,13 +415,22 @@ void Itinerary :: delete_Itinerary(){
         {
             row.push_back(word);
             count++;
-        } 
+        }
+        packageId=row[0];
+        title=row[1];
+        start=row[2];
+        end=row[3];
+        days=row[4];
+        expense=row[5];
         if(!fin.eof()){
-            if(packageId != row[0]){
+            if((ID != packageId) && (search != title || search != start || search != end)){
                 for(int i = 0; i<count;i++){
                     fout<<row[i]<<";";
                 }
                 fout<<"\n";
+            }
+            else if((ID == packageId) && (search == title || search == start || search == end)){
+                check = 1;
             }
         }
         if(fin.eof()){
@@ -256,26 +438,28 @@ void Itinerary :: delete_Itinerary(){
         }
     }
     if(check == -1){
-        system("cls");
-        moveCursor(30,10);
-        cout<<"List Empty";
-        moveCursor(30,15);
+        design();
+        moveCursor(60,10);
+        cout<<"*** Package Not Found!! ***";
+        moveCursor(60,20);
         cout<<"Press any key to continue....";
         getch();
         delete_Itinerary();
     }
     else{
-        system("cls");
+        design();
         fin.close();
         fout.close();
         remove("zitinerary.txt");
         rename("zitinerary2.txt","zitinerary.txt");
-        moveCursor(30,10);
-        cout<<"Package Id: "<<packageId<<" Deleted Successfully!";
-        moveCursor(30,15);
+        moveCursor(60,20);
+        cout<<"Package Id: "<<ID<<" Deleted Successfully!";
+        moveCursor(60,36);
         cout<<"Press any key to continue....";
         getch();
     }
+    choice = -1;
+    return (ID);
 }
 
 void Itinerary :: edit_Itinerary(){

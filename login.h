@@ -5,55 +5,60 @@
 
 string login :: signin(){
     string id,ps;
-    SIGNIN_TOP:
-        design();
-        topic = "Login";
-        headline(topic);
-        userId.clear();
-        password.clear();
-        moveCursor(60,18);
-        id=get_userId();
-        moveCursor(60,20);
-        ps=get_password();
-        fstream fin;
-        fin.open("zlogin.txt",ios::in);
-        vector<string>row;
-        string line, word;
-        count = 0;
-        while(!fin.eof()){
-            row.clear();
-            getline(fin,line);
-            stringstream s(line);
-            while(getline(s,word,';'))
-            {
-                row.push_back(word);
-            }
-            if(!fin.eof()){
-                userId=row[1];
-                password=row[2];
-                if( userId == id && password == ps ){
-                    design();
-                    headline(topic);
-                    moveCursor(60,18);
-                    display = "Login Successfull!!";
-                    print_slow(display);
-                    return(userId);
-                }
-            }
-            if(fin.eof()){
-                break;
+SIGNIN_TOP:
+    design();
+    topic = "Login";
+    headline(topic);
+    userId.clear();
+    password.clear();
+    moveCursor(2,18);
+    cout<<"Enter [404] to exit";
+    moveCursor(60,18);
+    id=get_userId();
+    if(id == "404"){
+        return (id);
+    }
+    moveCursor(60,20);
+    ps=get_password();
+    fstream fin;
+    fin.open("zlogin.txt",ios::in);
+    vector<string>row;
+    string line, word;
+    count = 0;
+    while(!fin.eof()){
+        row.clear();
+        getline(fin,line);
+        stringstream s(line);
+        while(getline(s,word,';'))
+        {
+            row.push_back(word);
+        }
+        if(!fin.eof()){
+            userId=row[1];
+            password=row[2];
+            if( userId == id && password == ps ){
+                design();
+                headline(topic);
+                moveCursor(60,18);
+                display = "Login Successfull!!";
+                print_slow(display);
+                return(userId);
             }
         }
-        fin.close();
-        design();
-        topic = "Login";
-        headline(topic);
-        moveCursor(60,18);
-        cout<<"Invalid attempt!!";
-        moveCursor(60,36);
-        cout<<"Press any key to continue....";
-        getch();
-        goto SIGNIN_TOP;
+        if(fin.eof()){
+            break;
+        }
+    }
+    fin.close();
+    design();
+    topic = "Login";
+    headline(topic);
+    moveCursor(60,18);
+    cout<<"Invalid attempt!!";
+    moveCursor(60,36);
+    cout<<"Press any key to continue....";
+    getch();
+    goto SIGNIN_TOP;
 }
 
 void login :: signup(){
@@ -73,8 +78,8 @@ void login :: signup(){
     password=get_password();
     power=get_power();
     do{
-        userId=generate_code("userId");
-    }while(checkId(userId, "userId"));
+        userId=generateCode("userId");
+    }while(checkCode(userId, "userId"));
     fout.open("zlogin.txt",ios::out | ios:: app);
     fout<<power<<";"<<userId<<";"<<password<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<"\n";
     fout.close();
@@ -256,26 +261,6 @@ string login :: get_password(){
 //     packageId = get_num(5);
 //     return(packageId);
 // }
-
-string login :: generate_code(string operation){
-    //here power is already stored from signup
-    int id;
-    login l;
-    if(operation == "userId"){
-        userId.clear();
-        srand(time(0));
-        id=370000+rand()%10000;
-        userId=to_string(id);
-    }
-    else if(operation == "package"){
-        userId.clear();
-        srand(time(0));
-        id=1000+rand()%1000;
-        userId=to_string(id);
-        userId = "AARC" + userId;
-    }
-    return(userId);
-}
 
 string login :: change_password(string passedId){
     string oldPassword, newPassword, confirmPassword;

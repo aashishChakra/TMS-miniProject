@@ -11,7 +11,9 @@
 #include<sstream>
 #include<graphics.h>
 #include<windows.h>
-#include<unistd.h>
+#include<unistd.h>//sleep
+#include<cctype>
+// #include<bits/stdc++.h>//string conversion
 
 using namespace std;
 
@@ -27,7 +29,7 @@ void moveCursor(int x, int y)
 
 class login{
     protected:
-        string userId, password, fname, lname, address, phone, email, power,nationality,packageId;
+        string userId, password, fname, lname, address, phone, email, power,packageId,number;
     public:
         void signup();
         string signin();
@@ -41,14 +43,16 @@ class login{
         // string get_packageId();
         string change_password(string);
         string get_power();
-        string generate_code(string);
         friend class Itinerary;
 };
 
 class book : public login{
+    protected:
+    string status, bookingId;;
     public:
-        void insert_booking();
-        void check_booking();
+        int insert_booking();
+        void check_booking(string);
+        void edit_booking();
         void bookingHead();
         void displayBooking(int);
 };
@@ -61,25 +65,25 @@ class Itinerary{
         void displayItinerary(int);
         void itineraryHead();
         void add_Itinerary();
-        void list_Itinerary();
-        void search_Itinerary();
-        void delete_Itinerary();
+        string list_Itinerary(string,string,string);
+        string search_Itinerary(string);
+        string delete_Itinerary();
         void edit_Itinerary();
 };
 
 string get_text(){
     string text;
-    TEXT_TOP:
         count = 0;
         text.clear();
         ch=getch();
-        while(ch != 13 ){
+        while(ch != 13){
+            TEXT_TOP:
             if(ch == 8 && count != 0){//backspace
                 cout<<"\b";
                 text.pop_back();
                 count--;
             }
-            else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122) && count != 25){//alphabets
+            else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122) && count != 25){//alphabets + limit to 25 digits
                 cout<<ch;
                 if(ch>=97 && ch<=122){//lower to upper case
                     ch-=32;
@@ -92,7 +96,7 @@ string get_text(){
             }
             ch=getch();
         }
-        if(count <= 0){
+        if(count <= 0 || count > 25){
             goto TEXT_TOP;
         }
         else{
@@ -238,7 +242,7 @@ void headline(string& title){
     }
 }
 
-bool checkId(string id, string operation){    
+bool checkCode(string id, string operation){    
     fstream fin;
     string userId;
     error = -1;
@@ -247,6 +251,9 @@ bool checkId(string id, string operation){
     }
     else if(operation == "package"){
         fin.open("zitinerary.txt",ios::in);
+    }
+    else if(operation == "booking"){
+        fin.open("zbooking_detail.txt",ios::in);
     }
     vector<string>row;
     string line, word,temp;
@@ -263,6 +270,9 @@ bool checkId(string id, string operation){
                 userId=row[1];
             }
             else if(operation == "package"){//gets package Id
+                userId=row[0];
+            }
+            else if(operation == "booking"){//gets booking Id
                 userId=row[0];
             }
             if(id == userId){
@@ -283,11 +293,40 @@ bool checkId(string id, string operation){
     }
 }
 
+string generateCode(string operation){
+    //here power is already stored from signup
+    string userId;
+    int id;
+    login l;
+    if(operation == "userId"){
+        userId.clear();
+        srand(time(0));
+        id=370000+rand()%10000;
+        userId=to_string(id);
+    }
+    else if(operation == "package"){
+        userId.clear();
+        srand(time(0));
+        id=1000+rand()%1000;
+        userId=to_string(id);
+        userId = "AARC" + userId;
+    }
+    return(userId);
+}
+
 void print_slow(string& display){
     for(int i =0;i<display.length();i++){
         cout<<display[i];
         usleep(88000);
     }
+}
+
+string upper(string change){
+    
+    for(int i = 0; i<change.length();i++){
+        change[i]=toupper(change[i]);
+    }   
+    return (change);
 }
 
 #endif

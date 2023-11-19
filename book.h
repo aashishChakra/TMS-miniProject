@@ -5,13 +5,19 @@
 //for clients to book packages
 
 
-void book :: insert_booking(){//service for client to add booking
-    design();
+int book :: insert_booking(){//service for client to add booking
+    Itinerary i;
+    string type = "book";
+    packageId = i.search_Itinerary("book");
     topic = "Booking Form";
+    if(packageId == "404"){
+        return (0);
+    }
+    design();
     headline(topic);
-    moveCursor(32,6);
-    cout<<"Package Id: ";
-    cin>>packageId/*=get_packageId()*/;
+    do{
+        bookingId=generateCode("booking");
+    }while(checkCode(userId, "userId"));
     moveCursor(32,8);
     fname=get_fname();
     moveCursor(32,10);
@@ -20,12 +26,14 @@ void book :: insert_booking(){//service for client to add booking
     address=get_address();
     moveCursor(32,14);
     phone=get_phone();
-    // moveCursor(32,16);
-    // nationality=get_nationality();
+    moveCursor(32,16);
+    cout<<"Number of Tickets: ";
+    number=get_num(1);
+    status = "WAITING";
     moveCursor(32,18);
     fstream fout;
     fout.open("zbooking_detail.txt",ios::out | ios::app);
-    fout<<packageId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<nationality<<"\n";
+    fout<<packageId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<number<<";"<<status<<"\n";
     fout.close();
     moveCursor(60,36);
     cout<<"Press any key to continue....";
@@ -40,7 +48,7 @@ void book :: insert_booking(){//service for client to add booking
     getch();
 } 
 
-void book :: check_booking(){//service for admin to see list of booking
+void book :: check_booking(string type){//service for admin to see list of booking
     topic = "Check Booking";
     design();
     headline(topic);
@@ -56,7 +64,7 @@ void book :: check_booking(){//service for admin to see list of booking
     vector<string>row;
     string line, word,temp;
     bookingHead();
-    count = 0;
+    count = -1;
     while(!fin.eof()){
         row.clear();
         getline(fin,line);
@@ -71,7 +79,8 @@ void book :: check_booking(){//service for admin to see list of booking
             lname=row[2];
             address=row[3];
             phone=row[4];
-            nationality=row[5];
+            number=row[5];
+            status=row[6];
             if(ID == packageId){
                 displayBooking(count);
                 count++;
@@ -102,16 +111,18 @@ void book :: bookingHead(){//prints the head in booking
     X = 30;
     moveCursor(X + 2,6);
     cout<<"Package ID";
-    moveCursor(X + 17,6);
+    moveCursor(X + 15,6);
     cout<<"First Name";
-    moveCursor(X + 37,6);
+    moveCursor(X + 29,6);
     cout<<"Last Name";
-    moveCursor(X + 57,6);
+    moveCursor(X + 45,6);
     cout<<"Address";
-    moveCursor(X + 72,6);
+    moveCursor(X+57,6);
     cout<<"Phone";
+    moveCursor(X + 67,6);
+    cout<<"Number";
     moveCursor(X + 82,6);
-    cout<<"Email";
+    cout<<"Status";
 }
 
 void book :: displayBooking(int a){//displays the booking details
@@ -119,15 +130,17 @@ void book :: displayBooking(int a){//displays the booking details
     a += 8;
     moveCursor(X+2,a);
     cout<<packageId;
-    moveCursor(X+17,a);
+    moveCursor(X+15,a);
     cout<<fname;
-    moveCursor(X+37,a);
+    moveCursor(X+29,a);
     cout<<lname;
-    moveCursor(X+57,a);
+    moveCursor(X+45,a);
     cout<<address;
-    moveCursor(X+72,a);
+    moveCursor(X+57,a);
     cout<<phone;
+    moveCursor(X+67,a);
+    cout<<number;
     moveCursor(X+82,a);
-    cout<<nationality<<endl;
+    cout<<status;
 }
 #endif
