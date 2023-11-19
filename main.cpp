@@ -33,25 +33,40 @@ int admin(string id){
             }
             case 3:{
                 choice = -1;
+                topic = "Booking";
                 while(choice != 0){
+                    design();
+                    headline(topic);
+                    moveCursor(60,16);
                     cout<<"1. Booking Requests";
+                    moveCursor(60,18);
                     cout<<"2. Confirmed Booking";
+                    moveCursor(60,20);
                     cout<<"3. Cancelled Booking";
+                    moveCursor(60,22);
+                    cout<<"4. Exit";
+                    moveCursor(60,36);
                     cout<<"Enter Your Choice: ";
+                    cin>>choice;
                     switch(choice){
                         case 1:{
-                            l.check_booking("WAITING");
+                            l.checkBooking("WAITING");
                             break;
                         }
                         case 2:{
-                            l.check_booking("CONFIRMED");
+                            l.checkBooking("CONFIRMED");
                             break;
                         }
                         case 3:{
-                            l.check_booking("CANCELLED");
+                            l.checkBooking("CANCELLED");
+                            break;
+                        }
+                        case 4:{
+                            choice = 0;
                             break;
                         }
                         default:{
+                            choice = -1;
                             break;
                         }
                     }

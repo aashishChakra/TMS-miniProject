@@ -51,7 +51,7 @@ class book : public login{
     string status, bookingId;;
     public:
         int insert_booking();
-        void check_booking(string);
+        string checkBooking(string);
         void edit_booking();
         void bookingHead();
         void displayBooking(int);

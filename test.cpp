@@ -1,5 +1,7 @@
 #include"class.h"
-#include "login.h"
+#include"itinerary.h"
+#include"book.h"
+#include"login.h"
 string phone, address;
 
 // string get_texts(){
@@ -48,13 +50,14 @@ string phone, address;
 // }
 
 int main(){
+    book l;
+    string type="WAITING";
     // cout<<"text: ";
     // get_address();
     // get_texts();
     // string display;
     // display = "WELCOME TO AARC TRAVEL MANAGEMENT SYSTEM....";
-    cout<<"enter :";
-    topic=get_text();
+    l.checkBooking(type);
     getch();
     return(0);
 }
