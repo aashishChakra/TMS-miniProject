@@ -12,13 +12,15 @@ int admin(string id){
         moveCursor(60,12);
         cout<<"1. Add Itinerary";
         moveCursor(60,14);
-        cout<<"2. Delete Itinerary";
+        cout<<"2. List Itinerary";
         moveCursor(60,16);
-        cout<<"3. View Bookings";
+        cout<<"3. Delete Itinerary";
         moveCursor(60,18);
-        cout<<"4. Change Password";
+        cout<<"4. View Bookings";
         moveCursor(60,20);
-        cout<<"5. Logout";
+        cout<<"5. Change Password";
+        moveCursor(60,22);
+        cout<<"6. Logout";
         moveCursor(60,36);
         cout<<"Enter your choice: ";
         cin>>choice;
@@ -28,10 +30,14 @@ int admin(string id){
                 break;
             }
             case 2:{
-                a.delete_Itinerary();
+                a.search_Itinerary("all");
                 break;
             }
             case 3:{
+                a.delete_Itinerary();
+                break;
+            }
+            case 4:{
                 choice = -1;
                 topic = "Booking";
                 while(choice != 0){
@@ -42,15 +48,20 @@ int admin(string id){
                     moveCursor(60,18);
                     cout<<"2. Confirmed Booking";
                     moveCursor(60,20);
-                    cout<<"3. Cancelled Booking";
+                    cout<<"3. Completed Booking";
                     moveCursor(60,22);
-                    cout<<"4. Exit";
+                    cout<<"4. Delete Booking";
+                    moveCursor(60,24);
+                    cout<<"5. Review Booking";
+                    moveCursor(60,26);
+                    cout<<"6. Exit";
                     moveCursor(60,36);
                     cout<<"Enter Your Choice: ";
                     cin>>choice;
                     switch(choice){
                         case 1:{
-                            l.checkBooking("WAITING");
+                            l.checkBooking("HOLDING");
+                            choice = -1;
                             break;
                         }
                         case 2:{
@@ -58,10 +69,18 @@ int admin(string id){
                             break;
                         }
                         case 3:{
-                            l.checkBooking("CANCELLED");
+                            l.checkBooking("COMPLETED");
                             break;
                         }
                         case 4:{
+                            l.checkBooking("DELETE");
+                            break;
+                        }
+                        case 5:{
+                            l.reviewBooking();
+                            break;
+                        }
+                        case 6:{
                             choice = 0;
                             break;
                         }
@@ -74,11 +93,11 @@ int admin(string id){
                 choice = -1;
                 break;
             }
-            case 4:{
+            case 5:{
                 l.change_password(id);
                 break;
             }
-            case 5:{
+            case 6:{
                 choice = 0;
                 design();
                 moveCursor(60,18);
@@ -115,7 +134,9 @@ int client(){
         moveCursor(60,18);
         cout<<"3. Book Package";
         moveCursor(60,20);
-        cout<<"4. Exit ";
+        cout<<"4. Review Booking";
+        moveCursor(60,22);
+        cout<<"5. Exit ";
         moveCursor(60,36);
         cout<<"Enter your choice: ";
         cin>>choice;
@@ -137,7 +158,11 @@ int client(){
                 l.insert_booking();
                 break;
             }
-            case 4:{//exit
+            case 4:{//checks
+                l.reviewBooking();
+                break;
+            }
+            case 5:{//exit
                 choice = 0;
                 design();
                 display = "Thank You For Joining With Us!!";

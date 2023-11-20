@@ -2,62 +2,76 @@
 #include"itinerary.h"
 #include"book.h"
 #include"login.h"
-string phone, address;
+string phone, address,bookingId,ID;
 
-// string get_texts(){
-//     string text;
-//     TEXT_TOP:
-//         count = 0;
-//         text.clear();
-//         ch=getch();
-//         while(ch != 13 ){
-//             if(ch == 8 && count != 0){//backspace
-//                 cout<<"\b";
-//                 text.pop_back();
-//                 count--;
-//             }
-//             else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122) && count != 25){//alphabets
-//                 cout<<ch;
-//                 if(ch>=97 && ch<=122){//lower to upper case
-//                     ch-=32;
-//                     text.push_back(ch);
-//                 }
-//                 else{
-//                     text.push_back(ch);
-//                 }
-//                 count++;
-//             }
-//             ch=getch();
-//         }
-//         if(count <= 0){
-//             goto TEXT_TOP;
-//         }
-//         else{
-//             return(text);
-//         }
-// }
-// string get_address(){
-//     string display;
-//     display = "WELCOME TO AARC TRAVEL MANAGEMENT SYSTEM....";
-    
-    
-// }
-// void print_slow(string& display){
-//     for(int i =0;i<display.length();i++){
-//         cout<<display[i];
-//         usleep(88000);
-//     }
-// }
-
+string test(){
+    fstream fin;
+    cin>>bookingId;
+    fin.open("zitinerary.txt",ios::in);
+    vector<string>row;
+    string line, word,temp;
+    count = -1;
+    while(!fin.eof()){
+        row.clear();
+        getline(fin,line);
+        stringstream s(line);
+        while(getline(s,word,';'))
+        {
+            row.push_back(word);
+            count++;
+        }
+        if(!fin.eof()){
+            if(bookingId == row[0]){
+                ID=row[6];
+                count = 0;
+                design();
+                moveCursor(32,10);
+                cout<<"Package ID: "<<row[0];
+                moveCursor(32,12);
+                cout<<"Title: "<<row[1];
+                moveCursor(32,14);
+                cout<<"Start: "<<row[2];
+                moveCursor(32,16);
+                cout<<"Destination: "<<row[3];
+                moveCursor(32,18);
+                cout<<"Number of days: "<<row[4];
+                moveCursor(32,20);
+                cout<<"expense: "<<row[5];
+                Y=13;
+                moveCursor(32,Y);
+                for(int i=6;i<count;i++){
+                    cout<<row[i];
+                    Y+=1;
+                    moveCursor(32,Y);
+                }
+                exit;
+            }
+            if(fin.eof()){
+                break;
+            }
+        }
+    }
+    fin.close();
+    if(count == -1){
+        design();
+        moveCursor(60,18);
+        cout<<"Booking Unavailable!!";
+        moveCursor(60,36);
+        cout<<"Press any key to continue....";
+        getch();
+    }
+    getch();
+}
 int main(){
-    book l;
+    book i;
     string type="WAITING";
     // cout<<"text: ";
     // get_address();
     // get_texts();
     // string display;
     // display = "WELCOME TO AARC TRAVEL MANAGEMENT SYSTEM....";
-    l.checkBooking(type);
+    i.reviewBooking();
+    // test();
     getch();
     return(0);
 }

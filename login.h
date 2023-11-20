@@ -81,7 +81,7 @@ void login :: signup(){
         userId=generateCode("userId");
     }while(checkCode(userId, "userId"));
     fout.open("zlogin.txt",ios::out | ios:: app);
-    fout<<power<<";"<<userId<<";"<<password<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<"\n";
+    fout<<power<<";"<<userId<<";"<<password<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";\n";
     fout.close();
     design();
     headline(topic);
@@ -111,7 +111,7 @@ string login :: get_fname(){
     count = 0;
     fname.clear();
     cout<<"First Name: ";
-    fname = get_text();
+    fname = get_text("nonspace");
     return(fname);
 }
 
@@ -119,7 +119,7 @@ string login :: get_lname(){
     count = 0;
     lname.clear();
     cout<<"Last Name: ";
-    lname = get_text();
+    lname = get_text("nonspace");
     return(lname);
 }
 

@@ -48,11 +48,11 @@ class login{
 
 class book : public login{
     protected:
-    string status, bookingId;;
+    string status, bookingId,cost;
     public:
         int insert_booking();
         string checkBooking(string);
-        void edit_booking();
+        void reviewBooking();
         void bookingHead();
         void displayBooking(int);
 };
@@ -71,7 +71,7 @@ class Itinerary{
         void edit_Itinerary();
 };
 
-string get_text(){
+string get_text(string type){
     string text;
         count = 0;
         text.clear();
@@ -93,6 +93,10 @@ string get_text(){
                     text.push_back(ch);
                 }
                 count++;
+            }
+            else if(ch == 32 && type == "space"){
+                text.push_back(ch);
+                cout<<ch;
             }
             ch=getch();
         }
@@ -123,7 +127,7 @@ string get_num(int a){//int "a" is length of digit
             }
             ch=getch();
         }
-        if(count <= 0){
+        if(count <= 0 || num == "0"){
             goto NUM_TOP;
         }
         else{
@@ -303,6 +307,13 @@ string generateCode(string operation){
         srand(time(0));
         id=370000+rand()%10000;
         userId=to_string(id);
+    }
+    else if(operation == "booking"){
+        userId.clear();
+        srand(time(0));
+        id=1000+rand()%1000;
+        userId=to_string(id);
+        userId = "BK" + userId;
     }
     else if(operation == "package"){
         userId.clear();

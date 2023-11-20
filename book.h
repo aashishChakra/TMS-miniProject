@@ -7,7 +7,9 @@
 
 int book :: insert_booking(){//service for client to add booking
     Itinerary i;
-    string type = "book";
+    fstream fin,fout;
+    topic = "Booking Form";
+    string expense,type = "book";
     packageId = i.search_Itinerary("book");
     topic = "Booking Form";
     if(packageId == "404"){
@@ -17,7 +19,7 @@ int book :: insert_booking(){//service for client to add booking
     headline(topic);
     do{
         bookingId=generateCode("booking");
-    }while(checkCode(userId, "userId"));
+    }while(checkCode(bookingId, "booking"));
     moveCursor(32,8);
     fname=get_fname();
     moveCursor(32,10);
@@ -29,19 +31,22 @@ int book :: insert_booking(){//service for client to add booking
     moveCursor(32,16);
     cout<<"Number of Tickets: ";
     number=get_num(1);
-    status = "WAITING";
     moveCursor(32,18);
-    fstream fout;
+    cout<<"TOTAL COST: ";
+    cost = stoi(number) * stoi(expense);
+    status = "HOLDING";
     fout.open("zbooking_detail.txt",ios::out | ios::app);
-    fout<<bookingId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<number<<";"<<packageId<<status<<"\n";
+    fout<<bookingId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<number<<";"<<packageId<<";"<<status<<cost<<";\n";
     fout.close();
     moveCursor(60,36);
     cout<<"Press any key to continue....";
     getch();
     design();
-    moveCursor(60,18);
+    moveCursor(60,17);
     cout<<"THANK YOU FOR BOOKING WITH US";
-    moveCursor(50,24);
+    moveCursor(60,19);
+    cout<<"YOUR BOOKING ID IS: "<<bookingId;
+    moveCursor(50,25);
     cout<<"NOTE: You will receive a call to confirm booking...";
     moveCursor(60,36);
     cout<<"Press any key to continue....";
@@ -49,6 +54,7 @@ int book :: insert_booking(){//service for client to add booking
 } 
 
 string book :: checkBooking(string type){//service for admin to see list of booking
+//type includes "HOLDING", "CONFIRMED", "COMPLETED", "DELETE"
     topic = "Check Booking";
     string ID;
     fstream fin,fout;
@@ -76,9 +82,15 @@ string book :: checkBooking(string type){//service for admin to see list of book
             number=row[5];
             packageId=row[6];
             status=row[7];
-            if(status == type){
+            if(status == type && type != "DELETE"){
                 moveCursor(2,18);
-                cout<<"Enter [EXIT] to exit";
+                cout<<"-Enter [EXIT] to exit";
+                displayBooking(count);
+                count++;
+            }
+            if(type == "DELETE"){
+                moveCursor(2,18);
+                cout<<"-Enter [EXIT] to exit";
                 displayBooking(count);
                 count++;
             }
@@ -96,28 +108,28 @@ ERROR_LOOP:
                 moveCursor(3,24);
                 cout<<"booking";
                 moveCursor(60,36);
-                cout<<"Enter Booking ID:";
+                cout<<"Enter your choice: ";
                 cin>>display;
                 display = upper(display);
-                if(display == "EXIT"){
+                if(display == "EXIT" || display == "E"){
                     ID = "404";
                     return (ID);
                 }
-                else if(display == "NEXT"){
+                else if(display == "NEXT" || display == "N"){
                     design();
                     headline(topic);
                     bookingHead();
                 }
-                else if(display == "ID"){
+                else if(display == "ID" || display == "I"){
                     break;
                 }
                 else{
                     goto ERROR_LOOP;
                 }
             }
-        }
-        if(fin.eof()){
-            break;
+            if(fin.eof()){
+                break;
+            }
         }
     }
     fin.close();
@@ -130,98 +142,118 @@ ERROR_LOOP:
         cout<<"Press any key to continue....";
         getch();
     }
-    else{
-        count = -1;
-        moveCursor(60,36);
-        cout<<"Enter Booking ID: ";
-        cin>>ID;
-        ID=upper(ID);
-        if(ID == "EXIT"){
-            ID = "404";
-            return (ID);
+STATUS_ERROR:
+    moveCursor(60,36);
+    cout<<"Enter Booking ID: ";
+    cin>>ID;
+    ID=upper(ID);
+    if(ID == "EXIT" || ID == "E"){
+        ID = "404";
+        return (ID);
+    }
+    fin.open("zbooking_detail.txt",ios::in);
+    fout.open("zbooking_detail2.txt",ios::out);
+    count = -1;
+    while(!fin.eof()){
+        row.clear();
+        getline(fin,line);
+        stringstream s(line);
+        while(getline(s,word,';'))
+        {
+            row.push_back(word);
         }
-        else{
-            fin.open("zbooking_detail.txt",ios::in);
-            fout.open("zbooking_detail2.txt",ios::out);
-            count = -1;
-            while(!fin.eof()){
-                row.clear();
-                getline(fin,line);
-                stringstream s(line);
-                while(getline(s,word,';'))
-                {
-                    row.push_back(word);
-                }
-                if(!fin.eof()){
-                    if(ID == row[0]){
-                        design();
-                        headline(topic);
-                        moveCursor(30,10);
-                        cout<<"Booking ID: "<<row[0];
-                        moveCursor(30,12);
-                        cout<<"First Name: "<<row[1];
-                        moveCursor(30,14);
-                        cout<<"Last Name: "<<row[2];
-                        moveCursor(30,16);
-                        cout<<"Address: "<<row[3];
-                        moveCursor(30,18);
-                        cout<<"Phone: "<<row[4];
-                        moveCursor(30,20);
-                        cout<<"Number of Tickets: "<<row[5];
-                        moveCursor(30,22);
-                        cout<<"Package ID: "<<row[6];
-                        moveCursor(30,24);
-                        cout<<"Status: "<<row[7];
-                        moveCursor(8,18);
-                        cout<<"'C' to Confirm.";
-                        moveCursor(8,20);
-                        cout<<"'H' to Hold.";
-                        moveCursor(8,22);
-                        cout<<"'D' to Cancle.";
-                        moveCursor(60,36);
-                        cout<<"Enter your choice: ";
-                        ch =getch();
-                        ch=toupper(ch);
-                        if(ch == 'C'){
-                            count = 0;
-                            fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<"CONFIRMED"<<"\n";
-                        }
-                        else if(ch == 'H'){
-                            fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<"WAITING"<<"\n";
-                        }
-                        else if(ch == 'D'){
-                            count = 1;
-                            fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<"CANCELLED"<<"\n";
-                        }
+        if(!fin.eof()){
+            if(type != "DELETE"){
+                if((ID == row[0]) && (type == row[7])){
+                    design();
+                    headline(topic);
+                    moveCursor(30,10);
+                    cout<<"Booking ID: "<<row[0];
+                    moveCursor(30,12);
+                    cout<<"First Name: "<<row[1];
+                    moveCursor(30,14);
+                    cout<<"Last Name: "<<row[2];
+                    moveCursor(30,16);
+                    cout<<"Address: "<<row[3];
+                    moveCursor(30,18);
+                    cout<<"Phone: "<<row[4];
+                    moveCursor(30,20);
+                    cout<<"Number of Tickets: "<<row[5];
+                    moveCursor(30,22);
+                    cout<<"Package ID: "<<row[6];
+                    moveCursor(30,24);
+                    cout<<"Status: "<<row[7];
+                    moveCursor(8,18);
+                    cout<<"'H' to Hold.";
+                    moveCursor(8,20);
+                    cout<<"'C' to Confirm.";
+                    moveCursor(8,22);
+                    cout<<"'F' to Complete.";
+                    moveCursor(8,24);
+                    cout<<"'D' to Delete.";
+    INPUT_ERROR:
+                    moveCursor(60,36);
+                    cout<<"Enter your choice: ";
+                    ch =getch();
+                    ch=toupper(ch);
+                    if(ch == 'C'){
+                        count = 1;
+                        type = "CONFIRMED";
+                        fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<"CONFIRMED"<<";\n";
+                    }
+                    else if(ch == 'H'){
+                        count = 1;
+                        type = "HOLDING";
+                        fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<"HOLDING"<<";\n";
+                    }
+                    else if(ch == 'F'){
+                        count = 1;
+                        type = "COMPLETED";
+                        fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<"COMPLETED"<<";\n";
+                    }
+                    else if(ch == 'D'){
+                        count = 1;
+                        type = "DELETE";
                     }
                     else{
-                        fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<row[7]<<"\n";
+                        goto INPUT_ERROR;
                     }
                 }
-                if(fin.eof()){
-                    break;
+                else{
+                    fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<row[7]<<";\n";
                 }
             }
-            fin.close();
-            fout.close();
-            remove("zbooking_detail.txt");
-            rename("zbooking_detail2.txt","zbooking_detail.txt");
-            design();
-            headline(topic);
-            moveCursor(60,18);
-            if(count == 0){
-                cout<<"Booking Confirmed for Booking Id: "<<ID;
+            else if(type == "DELETE"){
+                if(ID != row[0]){
+                    fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<row[7]<<";\n";
+                }
+                else if(ID == row[0]){
+                    count = 1;
+                }
+                type = "DELETE";
             }
-            else if(count == -1){
-                cout<<"Exiting Booking Operation";
+            if(fin.eof()){
+                break;
             }
-            else if(count == 1){
-                cout<<"Booking Deleted for Booking Id: "<<ID;
-            }
-            moveCursor(60,36);
-            cout<<"Press any key to continue....";
         }
     }
+    fin.close();
+    fout.close();
+    if(count == -1){
+        goto STATUS_ERROR;
+    }
+    else if(count == 1){
+        design();
+        headline(topic);
+        moveCursor(60,18);
+        cout<<"Booking "<<type<< " for Booking Id: "<<ID;
+    }
+    moveCursor(60,36);
+    cout<<"Press any key to continue....";
+    getch();
+    remove("zbooking_detail.txt");
+    rename("zbooking_detail2.txt","zbooking_detail.txt");
+    return(type);
 }
 
 void book :: bookingHead(){//prints the head in booking 
@@ -265,4 +297,154 @@ void book :: displayBooking(int a){//displays the booking details
     cout<<status;
 }
 
+void book :: reviewBooking(){
+    topic="Review Booking";
+    string ID;
+    fstream fin,ifin;
+    design();
+    moveCursor(60,20);
+    cout<<"Enter Booking ID: ";
+    cin>>bookingId;
+    bookingId=upper(bookingId);
+    fin.open("zbooking_detail.txt",ios::in);
+    vector<string>row;
+    string line, word,temp;
+    count = -1;
+    while(!fin.eof()){
+        row.clear();
+        getline(fin,line);
+        stringstream s(line);
+        while(getline(s,word,';'))
+        {
+            row.push_back(word);
+        }
+        if(!fin.eof()){
+            if(bookingId == row[0]){
+                ID=row[6];
+                count = 0;
+                design();
+                headline(topic);
+                moveCursor(32,6);
+                cout<<"BOOKING ID";
+                moveCursor(45,6);
+                cout<<": "<<row[0];
+                moveCursor(32,8);
+                cout<<"FIRST NAME";
+                moveCursor(45,8);
+                cout<<": "<<row[1];
+                moveCursor(32,10);
+                cout<<"LAST NAME";
+                moveCursor(45,10);
+                cout<<": "<<row[2];
+                moveCursor(32,12);
+                cout<<"ADDRESS";
+                moveCursor(45,12);
+                cout<<": "<<row[3];
+                moveCursor(32,14);
+                cout<<"PHONE";
+                moveCursor(45,14);
+                cout<<": "<<row[4];
+                moveCursor(32,16);
+                cout<<"TICKETS";
+                moveCursor(45,16);
+                cout<<": "<<row[5];
+                moveCursor(32,18);
+                cout<<"PACKAGE ID";
+                moveCursor(45,18);
+                cout<<": "<<row[6];
+                moveCursor(32,20);
+                cout<<"STATUS";
+                moveCursor(45,20);
+                cout<<": "<<row[7];
+            }
+            if(fin.eof()){
+                break;
+            }
+        }
+    }
+    fin.close();
+    if(count == -1){
+        design();
+        headline(topic);
+        moveCursor(60,18);
+        cout<<"Booking Unavailable!!";
+        moveCursor(60,36);
+        cout<<"Press any key to continue....";
+        getch();
+    }
+    else if(count == 0){
+        moveCursor(60,36);
+        cout<<"Press any key to continue....";
+        getch();
+        design();
+        ifin.open("zitinerary.txt",ios::in);
+        while(!ifin.eof()){
+            row.clear();
+            getline(ifin,line);
+            count = 0;
+            stringstream s(line);
+            while(getline(s,word,';'))
+            {
+                row.push_back(word);
+                count++;
+            }
+            if(!ifin.eof()){
+                if(ID == row[0]){
+                    design();
+                    headline(topic);
+                    moveCursor(32,6);
+                    cout<<"PACKAGE ID";
+                    moveCursor(47,6);
+                    cout<<": "<<row[0];
+                    moveCursor(32,7);
+                    cout<<"PACKAGE TITLE";
+                    moveCursor(47,7);
+                    cout<<": "<<row[1];
+                    moveCursor(32,8);
+                    cout<<"STARTING PLACE";
+                    moveCursor(47,8);
+                    cout<<": "<<row[2];
+                    moveCursor(32,9);
+                    cout<<"DESTINATION";
+                    moveCursor(47,9);
+                    cout<<": "<<row[3];
+                    moveCursor(32,10);
+                    cout<<"NUMBER OF DAYS";
+                    moveCursor(47,10);
+                    cout<<": "<<row[4];
+                    moveCursor(32,11);
+                    cout<<"EXPENSE(RS)";
+                    moveCursor(47,11);
+                    cout<<": "<<row[5];
+                    Y=13;
+                    moveCursor(32,Y);
+                    for(int i=6;i<count;i++){
+                        cout<<row[i];
+                        Y+=1;
+                        moveCursor(32,Y);
+                    }
+                    break;
+                }
+                if(ifin.eof()){
+                    break;
+                }
+            }
+        }
+        ifin.close();
+        if(count == -1){
+            design();
+            moveCursor(60,18);
+            cout<<"Package Not Found";
+            moveCursor(60,36);
+            cout<<"Press any key to continue....";
+            getch();
+        }
+        else{
+            moveCursor(60,36);
+            cout<<"Press any key to continue....";
+            getch();
+        }
+    }
+}
+    
 #endif
