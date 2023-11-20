@@ -4,6 +4,8 @@
 #include"class.h"
 
 void Itinerary :: itineraryHead(){
+//accessed by list only
+//to give head for list
     X = 30;
     moveCursor(X + 2,6);
     cout<<"PACKAGE ID";
@@ -20,6 +22,8 @@ void Itinerary :: itineraryHead(){
 }
 
 void Itinerary :: displayItinerary(int a){
+//accessed by list
+//to display list in systymetic manner
     X = 30;
     a += 8;
     moveCursor(X + 2,a);
@@ -37,6 +41,7 @@ void Itinerary :: displayItinerary(int a){
 }
 
 void Itinerary :: add_Itinerary(){
+//adds new package to system
     topic="Add Itinerary";
     fstream fout;
     login l;
@@ -106,7 +111,8 @@ void Itinerary :: add_Itinerary(){
     print_slow(display);
 }
 
-string Itinerary :: list_Itinerary(string source, string destination, string type){//lists the packages in the system
+string Itinerary :: list_Itinerary(string source, string destination, string type){
+//lists the packages in the system
 //accessed by search , booking
     topic = "List Itinerary";
     fstream fin;
@@ -190,9 +196,9 @@ ERROR_LOOP:
                 }
                 count = 0;
             }
-        if(fin.eof()){
-            break;
-        }
+            if(fin.eof()){
+                break;
+            }
         }
     }
     fin.close();
@@ -229,7 +235,12 @@ ERROR_LOOP:
     return (source);
 }
 
-string Itinerary :: search_Itinerary(string type){//purano search
+string Itinerary :: search_Itinerary(string type){
+//searches the desired packages
+//tpe specifies "general", "specific" ,"all"
+//"general" to search packages that matches 'package title', 'start place', 'destination'
+//"specific" to search package that has specific "start place" and "destination"
+//"all" to search package without any criteria
     int check;
     fstream fin;
     string ID,source,destination;

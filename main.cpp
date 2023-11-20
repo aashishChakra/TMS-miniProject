@@ -16,7 +16,7 @@ int admin(string id){
         moveCursor(60,16);
         cout<<"3. Delete Itinerary";
         moveCursor(60,18);
-        cout<<"4. View Bookings";
+        cout<<"4. Bookings Operation";
         moveCursor(60,20);
         cout<<"5. Change Password";
         moveCursor(60,22);
@@ -39,7 +39,7 @@ int admin(string id){
             }
             case 4:{
                 choice = -1;
-                topic = "Booking";
+                topic = "Booking Operation";
                 while(choice != 0){
                     design();
                     headline(topic);
@@ -158,7 +158,7 @@ int client(){
                 l.insert_booking();
                 break;
             }
-            case 4:{//checks
+            case 4:{//checks ticket details
                 l.reviewBooking();
                 break;
             }

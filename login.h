@@ -95,11 +95,14 @@ void login :: signup(){
 }
 
 string login :: get_power(){
+//no use
     power = "ADMIN";
     return (power);
 }
 
 string login :: get_userId(){
+//accessed by signup
+//reads from user not generate
     count=0;
     userId.clear();
     cout<<"USER ID: ";
@@ -124,12 +127,13 @@ string login :: get_lname(){
 }
 
 string login :: get_address(){
+//reads alphabets,numbers,comma,space,hypen
     int alphabet = 0;
-        count = 0;
-        address.clear();
-        cout<<"Address: ";
-        ch=getch();
-        while(ch != 13 ){
+    count = 0;
+    address.clear();
+    cout<<"Address: ";
+    ch=getch();
+    while(ch != 13 ){
         if(ch == 8 && count != 0){
             cout<<"\b";
             address.pop_back();
@@ -159,8 +163,8 @@ string login :: get_address(){
             address.push_back(ch);
             count++;
         }
-            ADDRESS_TOP:
-            ch=getch();
+ADDRESS_TOP:
+    ch=getch();
     }
     if(count == 0 || alphabet == 0){//checks if alphabets exists or not
         goto ADDRESS_TOP;
@@ -210,8 +214,8 @@ string login :: get_phone(){
             phone.push_back(ch);
             count += 1;
         }
-        PHONE_TOP:
-            ch=getch();
+PHONE_TOP:
+        ch=getch();
     }
     if(error != -1 || count != 10){//checks errors in enterd phone number
         goto PHONE_TOP;
@@ -220,30 +224,30 @@ string login :: get_phone(){
 }
 
 string login :: get_password(){
-        cout<<"Password: ";
-    PASSWORD_TOP:
-        count=0;
-        password.clear();
+    cout<<"Password: ";
+PASSWORD_TOP:
+    count=0;
+    password.clear();
+    ch=getch();
+    while(ch != 13){
+        if(ch == 8 && count != 0){
+            cout<<"\b";
+            password.pop_back();
+            count--;
+        }
+        else if(count != 20){
+            cout<<'*';
+            password.push_back(ch);
+            count++;
+        }
         ch=getch();
-        while(ch != 13){
-            if(ch == 8 && count != 0){
-                cout<<"\b";
-                password.pop_back();
-                count--;
-            }
-            else if(count != 20){
-                cout<<'*';
-                password.push_back(ch);
-                count++;
-            }
-            ch=getch();
-        }
-        if(count == 0){
-            goto PASSWORD_TOP;
-        }
-        else{
-            return(password);
-        }
+    }
+    if(count == 0){
+        goto PASSWORD_TOP;
+    }
+    else{
+        return(password);
+    }
 }
 
 // string login :: get_nationality(){
@@ -319,7 +323,7 @@ string login :: change_password(string passedId){
                                     cout<<"Confirm ";
                                     confirmPassword = l.get_password();
                                     if( (newPassword == confirmPassword) && (oldPassword != newPassword)){
-                                        fout<<row[0]<<";"<<row[1]<<";"<<newPassword<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<"\n";
+                                        fout<<row[0]<<";"<<row[1]<<";"<<newPassword<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";\n";
                                     }
                                     else if(oldPassword == newPassword){
                                         design();

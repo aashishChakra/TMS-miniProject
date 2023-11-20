@@ -9,11 +9,9 @@
 #include<vector>
 #include<fstream>
 #include<sstream>
-#include<graphics.h>
 #include<windows.h>
 #include<unistd.h>//sleep
-#include<cctype>
-// #include<bits/stdc++.h>//string conversion
+// #include<cctype>
 
 using namespace std;
 
@@ -71,71 +69,9 @@ class Itinerary{
         void edit_Itinerary();
 };
 
-string get_text(string type){
-    string text;
-        count = 0;
-        text.clear();
-        ch=getch();
-        while(ch != 13){
-            TEXT_TOP:
-            if(ch == 8 && count != 0){//backspace
-                cout<<"\b";
-                text.pop_back();
-                count--;
-            }
-            else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122) && count != 25){//alphabets + limit to 25 digits
-                cout<<ch;
-                if(ch>=97 && ch<=122){//lower to upper case
-                    ch-=32;
-                    text.push_back(ch);
-                }
-                else{
-                    text.push_back(ch);
-                }
-                count++;
-            }
-            else if(ch == 32 && type == "space"){
-                text.push_back(ch);
-                cout<<ch;
-            }
-            ch=getch();
-        }
-        if(count <= 0 || count > 25){
-            goto TEXT_TOP;
-        }
-        else{
-            return(text);
-        }
-}
-
-string get_num(int a){//int "a" is length of digit
-    string num;
-    NUM_TOP:
-        count = 0;
-        num.clear();
-        ch=getch();
-        while(ch != 13 ){//runs until enter is pressed or 10 digits
-            if(ch == 8 && count > 0){//presses backspace
-                cout<<"\b";
-                num.pop_back();
-                count -= 1;
-            }
-            else if(ch >= 48 && ch <= 57 && count != a){//reads only number
-                cout<<ch;
-                num.push_back(ch);
-                count ++;
-            }
-            ch=getch();
-        }
-        if(count <= 0 || num == "0"){
-            goto NUM_TOP;
-        }
-        else{
-            return(num);
-        }
-}
-
 void design(){
+//for design purpose
+//creates the box
     system("cls");
     moveCursor(60,2);
     cout<<"TRAVEL MANAGEMENT SYSTEM";
@@ -237,6 +173,8 @@ void design(){
 }
 
 void headline(string& title){
+//prints the headline 
+//for design purpose
     ch = 196;
     moveCursor(70,4);
     cout<<title;
@@ -246,7 +184,119 @@ void headline(string& title){
     }
 }
 
-bool checkCode(string id, string operation){    
+void print_slow(string& display){
+//displays effect in text
+    for(int i =0;i<display.length();i++){
+        cout<<display[i];
+        usleep(88000);
+    }
+}
+
+string get_text(string type){
+//reads only string
+//auto converts to upper case
+//type specifies whether to read space or not
+    string text;
+        count = 0;
+        text.clear();
+        ch=getch();
+        while(ch != 13){
+            TEXT_TOP:
+            if(ch == 8 && count != 0){//backspace
+                cout<<"\b";
+                text.pop_back();
+                count--;
+            }
+            else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122) && count != 25){//alphabets + limit to 25 digits
+                cout<<ch;
+                if(ch>=97 && ch<=122){//lower to upper case
+                    ch-=32;
+                    text.push_back(ch);
+                }
+                else{
+                    text.push_back(ch);
+                }
+                count++;
+            }
+            else if(ch == 32 && type == "space"){
+                text.push_back(ch);
+                cout<<ch;
+            }
+            ch=getch();
+        }
+        if(count <= 0 || count > 25){
+            goto TEXT_TOP;
+        }
+        else{
+            return(text);
+        }
+}
+
+string get_num(int a){//int "a" is length of digit
+//reads only numbers
+    string num;
+    NUM_TOP:
+        count = 0;
+        num.clear();
+        ch=getch();
+        while(ch != 13 ){//runs until enter is pressed or 10 digits
+            if(ch == 8 && count > 0){//presses backspace
+                cout<<"\b";
+                num.pop_back();
+                count -= 1;
+            }
+            else if(ch >= 48 && ch <= 57 && count != a){//reads only number
+                cout<<ch;
+                num.push_back(ch);
+                count ++;
+            }
+            ch=getch();
+        }
+        if(count <= 0 || num == "0"){
+            goto NUM_TOP;
+        }
+        else{
+            return(num);
+        }
+}
+
+string generateCode(string operation){
+//auto generates code
+    string userId;
+    int id;
+    if(operation == "userId"){
+        userId.clear();
+        srand(time(0));
+        id=370000+rand()%10000;
+        userId=to_string(id);
+    }
+    else if(operation == "booking"){
+        userId.clear();
+        srand(time(0));
+        id=1000+rand()%1000;
+        userId=to_string(id);
+        userId = "BK" + userId;
+    }
+    else if(operation == "package"){
+        userId.clear();
+        srand(time(0));
+        id=1000+rand()%1000;
+        userId=to_string(id);
+        userId = "AARC" + userId;
+    }
+    return(userId);
+}
+
+string upper(string change){
+//changes strings to uppercase
+    for(int i = 0; i<change.length();i++){
+        change[i]=toupper(change[i]);
+    }   
+    return (change);
+}
+
+bool checkCode(string id, string operation){ 
+//used to check if the generated id already exist or not   
     fstream fin;
     string userId;
     error = -1;
@@ -295,49 +345,6 @@ bool checkCode(string id, string operation){
     else{//id not found
         return(false);
     }
-}
-
-string generateCode(string operation){
-    //here power is already stored from signup
-    string userId;
-    int id;
-    login l;
-    if(operation == "userId"){
-        userId.clear();
-        srand(time(0));
-        id=370000+rand()%10000;
-        userId=to_string(id);
-    }
-    else if(operation == "booking"){
-        userId.clear();
-        srand(time(0));
-        id=1000+rand()%1000;
-        userId=to_string(id);
-        userId = "BK" + userId;
-    }
-    else if(operation == "package"){
-        userId.clear();
-        srand(time(0));
-        id=1000+rand()%1000;
-        userId=to_string(id);
-        userId = "AARC" + userId;
-    }
-    return(userId);
-}
-
-void print_slow(string& display){
-    for(int i =0;i<display.length();i++){
-        cout<<display[i];
-        usleep(88000);
-    }
-}
-
-string upper(string change){
-    
-    for(int i = 0; i<change.length();i++){
-        change[i]=toupper(change[i]);
-    }   
-    return (change);
 }
 
 #endif
