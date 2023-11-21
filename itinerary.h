@@ -348,7 +348,7 @@ SEARCH_TOP_B:
                     moveCursor(32,11);
                     cout<<"EXPENSE(RS)";
                     moveCursor(47,11);
-                    cout<<": "<<row[5];
+                    cout<<": "<<row[5]<<"\t *Per person";
                     Y=13;
                     moveCursor(32,Y);
                     for(int i=6;i<count;i++){

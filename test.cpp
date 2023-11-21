@@ -70,7 +70,7 @@ int main(){
     // get_texts();
     // string display;
     // display = "WELCOME TO AARC TRAVEL MANAGEMENT SYSTEM....";
-    i.add_Itinerary();
+    // i.add_Itinerary();
     // test();
     getch();
     return(0);

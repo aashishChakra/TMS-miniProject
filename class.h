@@ -348,9 +348,3 @@ bool checkCode(string id, string operation){
 }
 
 #endif
- /*
- package id =5
- userid = 6
- days = 2
- cost = 7
- */

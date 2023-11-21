@@ -127,16 +127,14 @@ int client(){
     choice = -1;
     while (choice != 0){
         design();
-        moveCursor(60,14);
-        cout<<"1. General Search Packages";
         moveCursor(60,16);
-        cout<<"2. Specific Search Packages";
+        cout<<"1. Search Packages";
         moveCursor(60,18);
-        cout<<"3. Book Package";
+        cout<<"2. Book Package";
         moveCursor(60,20);
-        cout<<"4. Review Booking";
+        cout<<"3. Review Booking";
         moveCursor(60,22);
-        cout<<"5. Exit ";
+        cout<<"4. Exit ";
         moveCursor(60,36);
         cout<<"Enter your choice: ";
         cin>>choice;
@@ -145,24 +143,17 @@ int client(){
                 topic = "general";
                 i.search_Itinerary(topic);
                 moveCursor(60,36);
-                
                 break;
             }
-            case 2:{//list  
-                topic = "specific";
-                i.search_Itinerary(topic);
-                moveCursor(60,36);
-                break;
-            }
-            case 3:{//search
+            case 2:{//book
                 l.insert_booking();
                 break;
             }
-            case 4:{//checks ticket details
+            case 3:{//checks ticket details
                 l.reviewBooking();
                 break;
             }
-            case 5:{//exit
+            case 4:{//exit
                 choice = 0;
                 design();
                 display = "Thank You For Joining With Us!!";

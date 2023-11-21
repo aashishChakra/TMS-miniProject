@@ -52,7 +52,12 @@ int book :: insert_booking(){//service for client to add booking
 
 string book :: checkBooking(string type){//service for admin to see list of booking
 //type includes "HOLDING", "CONFIRMED", "COMPLETED", "DELETE"
-    topic = "Check Booking";
+    if(type == "DELETE"){
+        topic = "Delete Booking";
+    }
+    else{
+        topic = "Check Booking";
+    }
     string ID;
     fstream fin,fout;
     design();

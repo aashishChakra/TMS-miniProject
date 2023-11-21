@@ -250,22 +250,6 @@ PASSWORD_TOP:
     }
 }
 
-// string login :: get_nationality(){
-//     count = 0;
-//     nationality.clear();
-//     cout<<"Nationality: ";
-//     nationality = get_text();
-//     return(nationality);
-// }
-
-// string login :: get_packageId(){
-//     count=0;
-//     packageId.clear();
-//     cout<<"Package Id: ";
-//     packageId = get_num(5);
-//     return(packageId);
-// }
-
 string login :: change_password(string passedId){
     string oldPassword, newPassword, confirmPassword;
     login l;
