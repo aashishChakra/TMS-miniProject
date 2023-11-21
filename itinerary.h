@@ -73,7 +73,7 @@ void Itinerary :: add_Itinerary(){
     cout<<"DAYS";
     moveCursor(47,14);
     cout<<": ";
-    days=get_num(1);
+    days=get_num(2);
     moveCursor(32,16);
     cout<<"EXPENSE(RS)";
     moveCursor(47,16);
@@ -97,7 +97,13 @@ void Itinerary :: add_Itinerary(){
     cout<<"\n\t\t\t\tIMPORTANT THINGS:";
     cin.ignore();
     getline(cin,things);
-    // display = toupper(things);
+    things = upper(things);
+    fout<<things<<";";
+    fout<<"COST INCLUDES: ;";
+    cout<<"\n\t\t\t\t\t***Note:Use '; ' to seperate sentence***\t\t\t\t";
+    cout<<"\n\t\t\t\tCOST INCLUDES:";
+    cin.ignore();
+    getline(cin,things);
     things = upper(things);
     fout<<things<<";\n";
     fout.close();
@@ -244,7 +250,7 @@ string Itinerary :: search_Itinerary(string type){
     int check;
     fstream fin;
     string ID,source,destination;
-    topic = "Search Packages";
+    topic = "Packages Details";
 SEARCH_TOP_A:
     design();
     headline(topic);
@@ -268,7 +274,7 @@ SEARCH_TOP_A:
     }
 SEARCH_TOP_B:
     ID = list_Itinerary(source, destination,type);
-    topic = "Search Packages";
+    topic = "Package Detail";
     if(ID == "error"){
         goto SEARCH_TOP_A;
     }
@@ -526,19 +532,21 @@ string Itinerary :: delete_Itinerary(){
     int check=-1;
     string search, ID;
 DELETE_TOP:
-    // moveCursor(60,20);
-    // cout<<"Enter Package Title: ";
-    // search=get_text("space");
-    ID = search_Itinerary(type);
+    design();
+    headline(topic);
+    moveCursor(60,20);
+    cout<<"Enter Package Title: ";
+    search=get_text("space");
+    ID = list_Itinerary(search,search,type);
     if(search == "404"){
         return (ID);
     }
-    design();
+    topic = "Delete Itinerary";
     headline(topic);
     moveCursor(60,36);
-    // cout<<"Enter Package ID: ";
-    // cin>>ID;
-    // ID=upper(ID);
+    cout<<"Enter Package ID: ";
+    cin>>ID;
+    ID=upper(ID);
     fin.open("zitinerary.txt",ios::in);
     fout.open("zitinerary2.txt",ios::out);
     check =- 1;
@@ -588,6 +596,7 @@ DELETE_TOP:
     }
     else{
         design();
+        headline(topic);
         moveCursor(60,20);
         cout<<"Package Id: "<<ID<<" Deleted Successfully!";
         moveCursor(60,36);

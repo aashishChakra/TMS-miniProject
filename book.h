@@ -9,7 +9,7 @@ int book :: insert_booking(){//service for client to add booking
     Itinerary i;
     fstream fin,fout;
     topic = "Booking Form";
-    string expense,type = "book";
+    string type = "book";
     packageId = i.search_Itinerary("book");
     topic = "Booking Form";
     if(packageId == "404"){
@@ -31,12 +31,9 @@ int book :: insert_booking(){//service for client to add booking
     moveCursor(32,16);
     cout<<"Number of Tickets: ";
     number=get_num(1);
-    moveCursor(32,18);
-    cout<<"TOTAL COST: ";
-    cost = stoi(number) * stoi(expense);
     status = "HOLDING";
     fout.open("zbooking_detail.txt",ios::out | ios::app);
-    fout<<bookingId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<number<<";"<<packageId<<";"<<status<<cost<<";\n";
+    fout<<bookingId<<";"<<fname<<";"<<lname<<";"<<address<<";"<<phone<<";"<<number<<";"<<packageId<<";"<<status<<";\n";
     fout.close();
     moveCursor(60,36);
     cout<<"Press any key to continue....";
@@ -302,6 +299,7 @@ void book :: reviewBooking(){
     string ID;
     fstream fin,ifin;
     design();
+    headline(topic);
     moveCursor(60,20);
     cout<<"Enter Booking ID: ";
     cin>>bookingId;

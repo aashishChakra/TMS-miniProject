@@ -63,14 +63,14 @@ string test(){
     getch();
 }
 int main(){
-    book i;
+    Itinerary i;
     string type="WAITING";
     // cout<<"text: ";
     // get_address();
     // get_texts();
     // string display;
     // display = "WELCOME TO AARC TRAVEL MANAGEMENT SYSTEM....";
-    i.reviewBooking();
+    i.add_Itinerary();
     // test();
     getch();
     return(0);

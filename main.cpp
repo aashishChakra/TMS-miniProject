@@ -241,7 +241,7 @@ int main(){
         }
     }
     design();
-    display = "Thank you for choosing us!!";
+    display = "Thank you for joinig with us!!";
     moveCursor(60,18);
     print_slow(display);
     return 0;
