@@ -15,7 +15,7 @@ SIGNIN_TOP:
     cout<<"Enter [404] to exit";
     moveCursor(60,18);
     id=get_userId();
-    if(id == "404"){
+    if(id == "EXIT"){
         return (id);
     }
     moveCursor(60,20);
@@ -128,43 +128,48 @@ string login :: get_lname(){
 
 string login :: get_address(){
 //reads alphabets,numbers,comma,space,hypen
-    int alphabet = 0;
+    int alphabet = 0, alphabet_position = -1;
     count = 0;
     address.clear();
     cout<<"Address: ";
+ADDRESS_TOP:
     ch=getch();
     while(ch != 13 ){
         if(ch == 8 && count != 0){
-            cout<<"\b";
+            cout<<"\b \b";
             address.pop_back();
             count--;
         }
-        else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122) && count != 30){//alphabets
+        else if((ch >= 65 && ch<=90) || (ch >= 97 && ch<=122) && count != 30){
+            //upper case alphabets or lower case alphabets
             cout<<ch;
-            if(ch>=97 && ch<=122){
+            if(ch>=97 && ch<=122){//condition to read lower case letter
+                //conversion from lower case to upper case
                 ch-=32;
+                address.push_back(ch);
+            }
+            else{//reading upper case letter
                 address.push_back(ch);
             }
             count ++;
             alphabet ++;
         }
-        else if(ch == 32 && count != 30){//space
+        else if(ch == 32 && count != 0){//condition to read space
             cout<<ch;
             address.push_back(ch);
             count++;
         }
-        else if(ch >= 48 && ch <= 57 && count != 30){//numbers
+        else if(ch >= 48 && ch <= 57 && count>1){//condition to read numbers
             cout<<ch;
             address.push_back(ch);
             count++;
         }
-        else if((ch == 44 || ch == 45) && count != 30){//hyphen and comma
+        else if((ch == 44 || ch == 45) && (count>1)){//condition to read comma and hyphen
             cout<<ch;
             address.push_back(ch);
             count++;
         }
-ADDRESS_TOP:
-    ch=getch();
+        ch=getch();
     }
     if(count == 0 || alphabet == 0){//checks if alphabets exists or not
         goto ADDRESS_TOP;
@@ -188,7 +193,7 @@ string login :: get_phone(){
                         error -= 1;
                     }
                 }
-                cout<<"\b";
+                cout<<"\b \b";
                 phone.pop_back();
                 count --;
             }
@@ -231,7 +236,7 @@ PASSWORD_TOP:
     ch=getch();
     while(ch != 13){
         if(ch == 8 && count != 0){
-            cout<<"\b";
+            cout<<"\b  \b";
             password.pop_back();
             count--;
         }

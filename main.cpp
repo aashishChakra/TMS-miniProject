@@ -5,7 +5,8 @@
 
 int admin(string id){
     choice = 1;
-    book l;
+    login l;
+    book b;
     Itinerary a;
     while(choice != 0){
         design();
@@ -30,10 +31,13 @@ int admin(string id){
                 break;
             }
             case 2:{
-                a.search_Itinerary("all");
+                // a.search_Itinerary("all");
+                topic = "List Itinerary";
+                a.list();
                 break;
             }
             case 3:{
+                topic = "Delete Itinerary";
                 a.delete_Itinerary();
                 break;
             }
@@ -60,24 +64,24 @@ int admin(string id){
                     cin>>choice;
                     switch(choice){
                         case 1:{
-                            l.checkBooking("HOLDING");
+                            b.checkBooking("HOLDING");
                             choice = -1;
                             break;
                         }
                         case 2:{
-                            l.checkBooking("CONFIRMED");
+                            b.checkBooking("CONFIRMED");
                             break;
                         }
                         case 3:{
-                            l.checkBooking("COMPLETED");
+                            b.checkBooking("COMPLETED");
                             break;
                         }
                         case 4:{
-                            l.checkBooking("DELETE");
+                            b.checkBooking("DELETE");
                             break;
                         }
                         case 5:{
-                            l.reviewBooking();
+                            b.reviewBooking();
                             break;
                         }
                         case 6:{
@@ -140,13 +144,14 @@ int client(){
         cin>>choice;
         switch(choice){
             case 1:{//list  
-                topic = "general";
-                i.search_Itinerary(topic);
+                // topic = "general";
+                // i.search_Itinerary(topic);
+                i.searching();
                 moveCursor(60,36);
                 break;
             }
             case 2:{//book
-                l.insert_booking();
+                l.bookingForm();
                 break;
             }
             case 3:{//checks ticket details
@@ -204,7 +209,7 @@ int main(){
             }
             case 2:{//login
                 id = l.signin();
-                if(id != "404"){
+                if(id != "EXIT"){
                     admin(id);
                 }
                 choice = 1;

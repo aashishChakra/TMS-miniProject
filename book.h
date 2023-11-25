@@ -4,15 +4,16 @@
 #include"class.h"
 //for clients to book packages
 
-
-int book :: insert_booking(){//service for client to add booking
+int book :: bookingForm(){//service for client to add booking
+    login l;
     Itinerary i;
     fstream fin,fout;
     topic = "Booking Form";
     string type = "book";
-    packageId = i.search_Itinerary("book");
+    // packageId = i.search_Itinerary("book");
+    packageId = i.searchforBooking();//function in itinerary class
     topic = "Booking Form";
-    if(packageId == "404"){
+    if(packageId == "EXIT"){
         return (0);
     }
     design();
@@ -21,13 +22,13 @@ int book :: insert_booking(){//service for client to add booking
         bookingId=generateCode("booking");
     }while(checkCode(bookingId, "booking"));
     moveCursor(32,8);
-    fname=get_fname();
+    fname=l.get_fname();
     moveCursor(32,10);
-    lname=get_lname();
+    lname=l.get_lname();
     moveCursor(32,12);
-    address=get_address();
+    address=l.get_address();
     moveCursor(32,14);
-    phone=get_phone();
+    phone=l.get_phone();
     moveCursor(32,16);
     cout<<"Number of Tickets: ";
     number=get_num(1);
@@ -44,7 +45,7 @@ int book :: insert_booking(){//service for client to add booking
     moveCursor(60,19);
     cout<<"YOUR BOOKING ID IS: "<<bookingId;
     moveCursor(50,25);
-    cout<<"NOTE: You will receive a call to confirm booking...";
+    cout<<"NOTE: PLEASE NOTE YOUR BOOKING ID FOR FUTURE CONFIRMATION.";
     moveCursor(60,36);
     cout<<"Press any key to continue....";
     getch();
@@ -53,13 +54,14 @@ int book :: insert_booking(){//service for client to add booking
 string book :: checkBooking(string type){//service for admin to see list of booking
 //type includes "HOLDING", "CONFIRMED", "COMPLETED", "DELETE"
     if(type == "DELETE"){
-        topic = "Delete Booking";
+        topic = "Delete Booking";//for displaying hedder
     }
     else{
-        topic = "Check Booking";
+        topic = "Check Booking";//for displaying hedder
     }
     string ID;
     fstream fin,fout;
+STATUS_ERROR:
     design();
     headline(topic);
     fin.open("zbooking_detail.txt",ios::in);
@@ -114,8 +116,7 @@ ERROR_LOOP:
                 cin>>display;
                 display = upper(display);
                 if(display == "EXIT" || display == "E"){
-                    ID = "404";
-                    return (ID);
+                    return ("EXIT");
                 }
                 else if(display == "NEXT" || display == "N"){
                     design();
@@ -139,19 +140,18 @@ ERROR_LOOP:
         design();
         headline(topic);
         moveCursor(60,18);
-        cout<<"Booking Unavailable!!";
+        cout<<"Booking Unavailable!! ";
         moveCursor(60,36);
         cout<<"Press any key to continue....";
         getch();
+        goto STATUS_ERROR;
     }
-STATUS_ERROR:
     moveCursor(60,36);
     cout<<"Enter Booking ID: ";
     cin>>ID;
     ID=upper(ID);
     if(ID == "EXIT" || ID == "E"){
-        ID = "404";
-        return (ID);
+        return ("EXIT");
     }
     fin.open("zbooking_detail.txt",ios::in);
     fout.open("zbooking_detail2.txt",ios::out);
@@ -226,11 +226,11 @@ STATUS_ERROR:
                 }
             }
             else if(type == "DELETE"){
-                if(ID != row[0]){
-                    fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<row[7]<<";\n";
-                }
-                else if(ID == row[0]){
+                if(ID == row[0]){
                     count = 1;
+                }
+                else{
+                    fout<<row[0]<<";"<<row[1]<<";"<<row[2]<<";"<<row[3]<<";"<<row[4]<<";"<<row[5]<<";"<<row[6]<<";"<<row[7]<<";\n";
                 }
                 type = "DELETE";
             }
@@ -242,6 +242,13 @@ STATUS_ERROR:
     fin.close();
     fout.close();
     if(count == -1){
+        design();
+        headline(topic);
+        moveCursor(60,18);
+        cout<<"Booking ID Unavailable!! ";
+        moveCursor(60,36);
+        cout<<"Press any key to continue....";
+        getch();
         goto STATUS_ERROR;
     }
     else if(count == 1){
@@ -250,11 +257,11 @@ STATUS_ERROR:
         moveCursor(60,18);
         cout<<"Booking "<<type<< " for Booking Id: "<<ID;
     }
+    remove("zbooking_detail.txt");
+    rename("zbooking_detail2.txt","zbooking_detail.txt");
     moveCursor(60,36);
     cout<<"Press any key to continue....";
     getch();
-    remove("zbooking_detail.txt");
-    rename("zbooking_detail2.txt","zbooking_detail.txt");
     return(type);
 }
 

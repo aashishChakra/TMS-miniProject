@@ -37,22 +37,21 @@ class login{
         string get_lname();
         string get_address();
         string get_phone();
-        // string get_nationality();
-        // string get_packageId();
         string change_password(string);
         string get_power();
         friend class Itinerary;
 };
 
-class book : public login{
+class book {
     protected:
-    string status, bookingId,cost;
+    string fname, lname, address, phone, status, bookingId, number, packageId, cost;
     public:
-        int insert_booking();
+        int bookingForm();
         string checkBooking(string);
         void reviewBooking();
         void bookingHead();
         void displayBooking(int);
+        
 };
 
 class Itinerary{
@@ -63,10 +62,12 @@ class Itinerary{
         void displayItinerary(int);
         void itineraryHead();
         void add_Itinerary();
-        string list_Itinerary(string,string,string);
-        string search_Itinerary(string);
+       
         string delete_Itinerary();
-        void edit_Itinerary();
+        string searchforBooking();
+        string detail(string);
+        string list();
+        string searching();
 };
 
 void design(){
@@ -172,7 +173,7 @@ void design(){
     } 
 }
 
-void headline(string& title){
+void headline(string title){
 //prints the headline 
 //for design purpose
     ch = 196;
@@ -184,7 +185,7 @@ void headline(string& title){
     }
 }
 
-void print_slow(string& display){
+void print_slow(string display){
 //displays effect in text
     for(int i =0;i<display.length();i++){
         cout<<display[i];
@@ -203,7 +204,7 @@ string get_text(string type){
         while(ch != 13){
             TEXT_TOP:
             if(ch == 8 && count != 0){//backspace
-                cout<<"\b";
+                cout<<"\b \b";
                 text.pop_back();
                 count--;
             }
@@ -218,7 +219,7 @@ string get_text(string type){
                 }
                 count++;
             }
-            else if(ch == 32 && type == "space"){
+            else if(ch == 32 && type == "space"){//for space
                 text.push_back(ch);
                 cout<<ch;
             }
@@ -241,7 +242,7 @@ string get_num(int a){//int "a" is length of digit
         ch=getch();
         while(ch != 13 ){//runs until enter is pressed or 10 digits
             if(ch == 8 && count > 0){//presses backspace
-                cout<<"\b";
+                cout<<"\b \b";
                 num.pop_back();
                 count -= 1;
             }

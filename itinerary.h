@@ -117,415 +117,8 @@ void Itinerary :: add_Itinerary(){
     print_slow(display);
 }
 
-string Itinerary :: list_Itinerary(string source, string destination, string type){
-//lists the packages in the system
-//accessed by search , booking
-    topic = "List Itinerary";
-    fstream fin;
-    choice = -1;
-    fin.open("zitinerary.txt",ios::in);
-    vector<string>row;
-    string line, word,temp;
-    design();
-    headline(topic);
-    itineraryHead();
-    count = -1;
-    while(!fin.eof()){
-        row.clear();
-        getline(fin,line);
-        stringstream s(line);
-        while(getline(s,word,';'))
-        {
-            row.push_back(word);
-        }
-        packageId=row[0];
-        title=row[1];
-        start=row[2];
-        end=row[3];
-        days=row[4];
-        expense=row[5];
-        if(!fin.eof()){
-            if(type == "general"  || type == "book"){
-                if(source == title || source == start || destination == end){
-                    displayItinerary(count);
-                    count+=1;
-                }
-            }
-            else if (type == "specific"){
-                if(source == start && destination == end){
-                displayItinerary(count);
-                count += 1;
-                }
-            }
-            else if(type == "all"){
-                displayItinerary(count);
-                count += 1;
-            }
-            if(count == 26){
-ERROR_LOOP:
-                moveCursor(2,18);
-                cout<<"-Enter [EXIT] to exit";
-                moveCursor(2,20);
-                cout<<"-Enter [NEXT] to";
-                moveCursor(3,21);
-                cout<<"continue to next page";
-                if(type == "general" || type == "specific" || type == "all"){
-                    moveCursor(2,23);
-                    cout<<"-Enter [ID] to ";
-                    moveCursor(2,24);
-                    cout<<"view detail";
-                }
-                if(type == "book"){
-                    moveCursor(2,23);
-                    cout<<"-Enter [ID] to book";
-                }
-                moveCursor(60,36);
-                cout<<"Enter your choice:";
-                cin>>display;
-                display = upper(display);
-                if(display == "EXIT" || display == "E"){
-                    return ("404");
-                }
-                else if(display == "NEXT" || display == "N"){
-                    design();
-                    headline(topic);
-                    itineraryHead();
-                }
-                else if(display == "ID" && type != "book"){
-                    return("middle");
-                }
-                else if(display == "ID" && type == "book"){
-                    break;
-                }
-                else{
-                    goto ERROR_LOOP;
-                }
-                count = 0;
-            }
-            if(fin.eof()){
-                break;
-            }
-        }
-    }
-    fin.close();
-    if(count == -1){
-        while(choice != 0){
-            design();
-            headline(topic);
-            moveCursor(60,8);
-            cout<<"**** Package Not Found!! ***";
-            moveCursor(60,18);
-            cout<<"1. Try Again";
-            moveCursor(60,20);
-            cout<<"2. Exit";
-            moveCursor(60,36);
-            cout<<"Enter Your Choice: ";
-            cin>>choice;
-            switch(choice){
-                case 1:{
-                    choice = -1;
-                    return("error");
-                    break;
-                }
-                case 2:{
-                    return ("404");
-                }
-                default:{
-                    choice = -1;
-                    break;
-                }
-            }
-        }
-    }
-    choice = -1;
-    return (source);
-}
-
-string Itinerary :: search_Itinerary(string type){
-//searches the desired packages
-//tpe specifies "general", "specific" ,"all"
-//"general" to search packages that matches 'package title', 'start place', 'destination'
-//"specific" to search package that has specific "start place" and "destination"
-//"all" to search package without any criteria
-    int check;
-    fstream fin;
-    string ID,source,destination;
-    topic = "Packages Details";
-SEARCH_TOP_A:
-    design();
-    headline(topic);
-    if(type == "general"  || type == "book"){
-        moveCursor(60,20);
-        cout<<"Enter Package Title: ";
-        source=get_text("space");
-        destination = source;
-    }
-    else if(type == "specific"){
-        moveCursor(60,20);
-        cout<<"Enter Starting Place: ";
-        source=get_text("space");
-        moveCursor(60,22);
-        cout<<"Enter Destination: ";
-        destination=get_text("space");
-    }
-    else if(type == "all"){
-        source = "KATHMANDU";
-        source = destination;
-    }
-SEARCH_TOP_B:
-    ID = list_Itinerary(source, destination,type);
-    topic = "Package Detail";
-    if(ID == "error"){
-        goto SEARCH_TOP_A;
-    }
-    else if(ID == "404"){
-        ID = "404";
-        return (ID);
-    }
-    moveCursor(2,18);
-    cout<<"-Enter [EXIT] to exit";
-    if(ID != "middle"){
-        moveCursor(2,20);
-        cout<<"-Enter package id to";
-        moveCursor(2,21);
-        cout<<" view detail";
-    }
-    moveCursor(60,36);
-    cout<<"Enter Package ID: ";
-    cin>>ID;
-    ID=upper(ID);
-    if(ID == "EXIT" || ID == "E"){
-        ID = "404";
-        return (ID);
-    }
-    count = -1;
-    design();
-    headline(topic);
-    check = -1;
-    fin.open("zitinerary.txt",ios::in);
-    vector<string>row;
-    string line, word;
-    while(!fin.eof()){
-        row.clear();
-        getline(fin,line);
-        count = 0;
-        stringstream s(line);
-        while(getline(s,word,';'))
-        {
-            row.push_back(word);
-            count++;
-        }        
-        packageId=row[0];
-        title=row[1];
-        start=row[2];
-        end=row[3];
-        days=row[4];
-        expense=row[5];
-        if(!fin.eof()){
-            if(type == "general"  || type == "book"){
-                if((ID == packageId) && (source == title || source == start || destination == end)){
-                    check = 1;
-                    moveCursor(32,6);
-                    cout<<"PACKAGE ID";
-                    moveCursor(47,6);
-                    cout<<": "<<row[0];
-                    moveCursor(32,7);
-                    cout<<"PACKAGE TITLE";
-                    moveCursor(47,7);
-                    cout<<": "<<row[1];
-                    moveCursor(32,8);
-                    cout<<"START";
-                    moveCursor(47,8);
-                    cout<<": "<<row[2];
-                    moveCursor(32,9);
-                    cout<<"DESTINATION";
-                    moveCursor(47,9);
-                    cout<<": "<<row[3];
-                    moveCursor(32,10);
-                    cout<<"NUMBER OF DAYS";
-                    moveCursor(47,10);
-                    cout<<": "<<row[4];
-                    moveCursor(32,11);
-                    cout<<"EXPENSE(RS)";
-                    moveCursor(47,11);
-                    cout<<": "<<row[5]<<"\t *Per person";
-                    Y=13;
-                    moveCursor(32,Y);
-                    for(int i=6;i<count;i++){
-                        cout<<row[i];
-                        Y+=1;
-                        moveCursor(32,Y);
-                    }
-                    exit;
-                }
-            }
-            else if(type == "all"){
-                if(ID == packageId){
-                    check = 1;
-                    moveCursor(32,6);
-                    cout<<"PACKAGE ID";
-                    moveCursor(47,6);
-                    cout<<": "<<row[0];
-                    moveCursor(32,7);
-                    cout<<"PACKAGE TITLE";
-                    moveCursor(47,7);
-                    cout<<": "<<row[1];
-                    moveCursor(32,8);
-                    cout<<"START";
-                    moveCursor(47,8);
-                    cout<<": "<<row[2];
-                    moveCursor(32,9);
-                    cout<<"DESTINATION";
-                    moveCursor(47,9);
-                    cout<<": "<<row[3];
-                    moveCursor(32,10);
-                    cout<<"NUMBER OF DAYS";
-                    moveCursor(47,10);
-                    cout<<": "<<row[4];
-                    moveCursor(32,11);
-                    cout<<"EXPENSE(RS)";
-                    moveCursor(47,11);
-                    cout<<": "<<row[5];
-                    Y=13;
-                    moveCursor(32,Y);
-                    for(int i=6;i<count;i++){
-                        cout<<row[i];
-                        Y+=1;
-                        moveCursor(32,Y);
-                    }
-                    exit;
-                }
-            }
-            else if(type == "specific"){
-                if(ID == packageId && source == start && destination == end){
-                    check = 1;
-                    moveCursor(32,6);
-                    cout<<"PACKAGE ID";
-                    moveCursor(47,6);
-                    cout<<": "<<row[0];
-                    moveCursor(32,7);
-                    cout<<"PACKAGE TITLE";
-                    moveCursor(47,7);
-                    cout<<": "<<row[1];
-                    moveCursor(32,8);
-                    cout<<"START";
-                    moveCursor(47,8);
-                    cout<<": "<<row[2];
-                    moveCursor(32,9);
-                    cout<<"DESTINATION";
-                    moveCursor(47,9);
-                    cout<<": "<<row[3];
-                    moveCursor(32,10);
-                    cout<<"NUMBER OF DAYS";
-                    moveCursor(47,10);
-                    cout<<": "<<row[4];
-                    moveCursor(32,11);
-                    cout<<"EXPENSE(RS)";
-                    moveCursor(47,11);
-                    cout<<": "<<row[5];
-                    Y=13;
-                    moveCursor(32,Y);
-                    for(int i=6;i<count;i++){
-                        cout<<row[i];
-                        Y+=1;
-                        moveCursor(32,Y);
-                    }
-                    exit;
-                }
-            }
-        }
-        if(fin.eof()){
-            break;
-        }
-    }
-    fin.close();
-    if(check == -1){
-        while(choice != 0){
-            design();
-            headline(topic);
-            moveCursor(60,8);
-            cout<<"**** Package Not Found!!";
-            moveCursor(60,18);
-            cout<<"1. Search Menu";
-            moveCursor(60,20);
-            cout<<"2. List";
-            moveCursor(60,22);
-            cout<<"3. Exit";
-            moveCursor(60,36);
-            cout<<"Enter Your Choice: ";
-            cin>>choice;
-            switch(choice){
-                case 1:{
-                    goto SEARCH_TOP_A;
-                    break;
-                }
-                case 2:{
-                    design();
-                    headline(topic);
-                    goto SEARCH_TOP_B;
-                    break;
-                }
-                case 3:{
-                    ID = "404";
-                    choice = -1;
-                    return (ID);
-                }
-                default:{
-                    choice = -1;
-                    break;
-                }
-            }
-        }
-    }
-    else{
-        moveCursor(60,36);
-        cout<<"Press any key to continue....";
-        getch();
-        if(type == "specific" || type == "general"){
-            while(choice != 0){
-                design();
-                headline(topic);
-                moveCursor(60,18);
-                cout<<"1. New Search";
-                moveCursor(60,20);
-                cout<<"2. List";
-                moveCursor(60,22);
-                cout<<"3. Exit";
-                moveCursor(60,36);
-                cout<<"Enter Your Choice: ";
-                cin>>choice;
-                switch(choice){
-                    case 1:{
-                        design();
-                        headline(topic);
-                        goto SEARCH_TOP_A;
-                        choice = -1;
-                        break;
-                    }
-                    case 2:{
-                        goto SEARCH_TOP_B;
-                        choice = -1;
-                        break;
-                    }
-                    case 3:{
-                        choice = -1;
-                        return (ID);
-                    }
-                    default:{
-                        choice = -1;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    choice = -1;
-    return (ID);
-}
-
 string Itinerary :: delete_Itinerary(){
     topic = "Delete Itinerary";
-    string type = "general";
     fstream fin,fout;
     vector<string>row;
     string line, word;
@@ -535,18 +128,19 @@ DELETE_TOP:
     design();
     headline(topic);
     moveCursor(60,20);
-    cout<<"Enter Package Title: ";
-    search=get_text("space");
-    ID = list_Itinerary(search,search,type);
-    if(search == "404"){
-        return (ID);
+    // cout<<"Enter Package Title: ";
+    // search=get_text("space");
+    // ID = list_Itinerary(search,search,type);
+    ID =searching();
+    if(ID == "EXIT"){
+        return ("EXIT");
     }
-    topic = "Delete Itinerary";
-    headline(topic);
-    moveCursor(60,36);
-    cout<<"Enter Package ID: ";
-    cin>>ID;
-    ID=upper(ID);
+    // design();
+    // headline(topic);
+    // moveCursor(60,36);
+    // cout<<"Enter Package ID: ";
+    // cin>>ID;
+    // ID=upper(ID);
     fin.open("zitinerary.txt",ios::in);
     fout.open("zitinerary2.txt",ios::out);
     check =- 1;
@@ -573,8 +167,8 @@ DELETE_TOP:
                 }
                 fout<<"\n";
             }
-            else if((ID == packageId) && (search == title || search == start || search == end)){
-                check = 1;
+            else if(ID == packageId){
+                check += 1;
             }
         }
         if(fin.eof()){
@@ -607,93 +201,433 @@ DELETE_TOP:
     return (ID);
 }
 
-void Itinerary :: edit_Itinerary(){
-    system("cls");
-    moveCursor(30,2);
-    cout<<"Edit Package";
-    int check = -1;
-    string ID;
-    fstream fin,fout;
-    fin.open("zitinerary.txt",ios::in);
-    fout.open("zitinerary2.txt",ios::out|ios::app);
+string Itinerary :: searchforBooking(){//accessed by booingForm only
+    topic="Book Package";
+    fstream fin;
+    string search,ID;
+    design();
+    headline(topic);
+    moveCursor(60,20);
+    cout<<"Enter Package Title: ";
+    search = get_text("space");
+TRY:
+    fin.open("zitinerary.txt", ios::in);
     vector<string>row;
-    string line, word;
-    count = 0;
-    cout<<endl<<"Enter Package ID: ";
-    ID=get_num(5);
-    cout<<endl;
+    string line, word,temp;
+    design();
+    headline(topic);
+    itineraryHead();
+    count = -1;
     while(!fin.eof()){
         row.clear();
         getline(fin,line);
-        count = 0;
         stringstream s(line);
         while(getline(s,word,';'))
         {
             row.push_back(word);
-            count++;
         }
         if(!fin.eof()){
-            if(ID == row[0]){
-                check = 1;
-                cout<<endl<<"Fill the below details:"
-                <<endl<<"*NOTE:Use [space] before every entries*\n"<<endl;
-                cout<<endl<<"Package ID: ";
-                packageId=get_num(5);
-                cout<<endl<<"Package Title: ";
-                title=get_text("space");
-                cout<<endl<<"Starting Place: ";
-                start=get_text("space");
-                cout<<endl<<"Destination: ";
-                end=get_text("space");
-                cout<<endl<<"Days: ";
-                days=get_num(2);
-                cout<<endl<<"Expense(RS): ";
-                expense=get_num(7);
-                fout<<packageId<<";"<<title<<";"<<start<<";"<<end<<";"<<days<<";"<<expense<<";";
-                day=stoi(days);
-                cout<<endl<<"Add Every day Destination:"<<endl;
-                for(int i=0;i<day;i++){
-                    cout<<endl<<"Destination in Day"<<i+1<<" : ";
-                    reach=get_text("space");
-                    fout<<"Day "<<i+1<<" : "<<reach<<";";
-                }
-                fout<<"Important Things: "<<";";
-                cout<<endl<<"Important Things: "<<endl;
-                cout<<"*Note:Use ';[space]' to seperate sentence\n"<<endl;
-                cin.ignore();
-                getline(cin,things);
-                fout<<things<<"\n";
+            packageId=row[0];
+            title=row[1];
+            start=row[2];
+            end=row[3];
+            days=row[4];
+            expense=row[5];
+            if(search == row[1] || search == row[2] || search == row[3]){
+                displayItinerary(count);
+                count += 1;
             }
-            else{
-                for(int i = 0; i<count;i++){
-                    fout<<row[i]<<";";
+            if(count == 26){
+ERROR_LOOP:
+                moveCursor(2,18);
+                cout<<"-Enter [EXIT] to exit";
+                moveCursor(2,20);
+                cout<<"-Enter [NEXT] to";
+                moveCursor(3,21);
+                cout<<"continue to next page";
+                moveCursor(2,23);
+                cout<<"-Enter [ID] to book";
+                moveCursor(60,36);
+                cout<<"Enter your choice:";
+                display = get_text("nospace");
+                if(display == "EXIT" || display == "E"){
+                    return ("EXIT");
                 }
-                fout<<"\n";
+                else if(display == "NEXT" || display == "N"){
+                    design();
+                    headline(topic);
+                    itineraryHead();
+                }
+                else if(display == "ID"){
+                    break;
+                }
+                else{
+                    goto ERROR_LOOP;
+                }
+                count = 0;
+            }
+            if(fin.eof()){
+                break;
             }
         }
-        if(fin.eof()){
-            break;
-        }
-    }
-    if(check == -1){
-        system("cls");
-        moveCursor(50,10);
-        cout<<"Package not Found!";
-        moveCursor(50,15);
-        cout<<"Press any key to continue....";
-        getch();
     }
     fin.close();
-    fout.close();
-    remove("zitinerary.txt");
-    rename("zitinerary2.txt","zitinerary.txt");
-    if(check != -1){
-        system("cls");
-        moveCursor(50,10);
-        cout<<"Package Id: "<<packageId<<" Edited Successfully!";
-        moveCursor(50,15);
-        cout<<"Press any key to continue....";
+    if(count == -1){
+        while(choice != 0){
+            design();
+            headline(topic);
+            moveCursor(60,8);
+            cout<<"**** Package Not Found!! ***";
+            moveCursor(60,18);
+            cout<<"1. Try Again";
+            moveCursor(60,20);
+            cout<<"2. Exit";
+            moveCursor(60,36);
+            cout<<"Enter Your Choice: ";
+            cin>>choice;
+            switch(choice){
+                case 1:{
+                    searchforBooking();//calls same functio again
+                }
+                case 2:{
+                    return ("EXIT");
+                }
+                default:{
+                    choice = -1;
+                    break;
+                }
+            }
+        }
+    }
+    else if(count != -1){//to desplay details of package
+        count = -1;
+        moveCursor(2,18);
+        cout<<"-Enter [EXIT] to exit";
+        moveCursor(60,36);
+        cout<<"Enter Package ID: ";
+        cin>>ID;
+        ID = upper(ID);
+        if(ID == "EXIT" || ID == "E"){
+            return ("EXIT");
+        }
+        ID = detail(ID);
+        if(ID == "TRY AGAIN"){
+            goto TRY;
+        }
+        else if(ID == "EXIT"){
+            return ("EXIT");
+        }
+        else{
+            moveCursor(60,36);
+            cout<<"Press  any key to continue....";
+            getch();
+            return (ID);
+        }  
+    }
+}
+
+string Itinerary :: detail(string search){
+    topic = "Package Detail";
+    string ID;
+    design();
+    headline(topic);
+    choice = -1;
+    fstream fin;
+    fin.open("zitinerary.txt", ios::in);
+    vector<string>row;
+    string line, word,temp;
+    count = -1;
+    while(!fin.eof()){
+        count = 0;
+        row.clear();
+        getline(fin,line);
+        stringstream s(line);
+        while(getline(s,word,';'))
+        {
+            row.push_back(word);
+            count ++;
+        }
+        ID = row[0];
+        if(!fin.eof()){
+            if(search == row[0]){
+                moveCursor(32,6);
+                cout<<"PACKAGE ID";
+                moveCursor(47,6);
+                cout<<": "<<row[0];
+                moveCursor(32,7);
+                cout<<"PACKAGE TITLE";
+                moveCursor(47,7);
+                cout<<": "<<row[1];
+                moveCursor(32,8);
+                cout<<"START";
+                moveCursor(47,8);
+                cout<<": "<<row[2];
+                moveCursor(32,9);
+                cout<<"DESTINATION";
+                moveCursor(47,9);
+                cout<<": "<<row[3];
+                moveCursor(32,10);
+                cout<<"NUMBER OF DAYS";
+                moveCursor(47,10);
+                cout<<": "<<row[4];
+                moveCursor(32,11);
+                cout<<"EXPENSE(RS)";
+                moveCursor(47,11);
+                cout<<": "<<row[5]<<"\t *Per person";
+                Y=13;
+                moveCursor(32,Y);
+                for(int i=6;i<count;i++){
+                    cout<<row[i];
+                    Y+=1;
+                    moveCursor(32,Y);
+                }
+                count = 1;
+                break;
+            }
+            if(fin.eof()){
+                break;
+            }
+        }
+    }
+    fin.close();
+    if(count == 0){//file not found
+        while(choice != 0){
+            design();
+            headline(topic);
+            moveCursor(60,8);
+            cout<<"**** Package Not Found!! ***";
+            moveCursor(60,18);
+            cout<<"1. Try Again";
+            moveCursor(60,20);
+            cout<<"2. Exit";
+            moveCursor(60,36);
+            cout<<"Enter Your Choice: ";
+            cin>>choice;
+            switch(choice){
+                case 1:{
+                    return ("TRY AGAIN");//because current function doesnot read from user
+                }
+                case 2:{
+                    return ("EXIT");
+                }
+                default:{
+                    choice = -1;
+                    break;
+                }
+            }
+        }
+    }
+    else if(count == 1){//file found and displayed
+        choice = -1;
+        return (ID);
+    }
+}
+
+string Itinerary :: searching(){
+    topic = "Search Package";
+    fstream fin;
+    string search,ID;
+    design();
+    headline(topic);
+    moveCursor(60,20);
+    cout<<"Enter Package Title: ";
+    search = get_text("space");
+TRY:
+    fin.open("zitinerary.txt", ios::in);
+    vector<string>row;
+    string line, word,temp;
+    design();
+    headline(topic);
+    itineraryHead();
+    count = -1;
+    while(!fin.eof()){
+        row.clear();
+        getline(fin,line);
+        stringstream s(line);
+        while(getline(s,word,';'))
+        {
+            row.push_back(word);
+        }
+        if(!fin.eof()){
+            packageId=row[0];
+            title=row[1];
+            start=row[2];
+            end=row[3];
+            days=row[4];
+            expense=row[5];
+            if(search == row[1] || search == row[2] || search == row[3]){
+                displayItinerary(count);
+                count += 1;
+            }
+            if(count == 26){
+ERROR_LOOP:
+                moveCursor(2,18);
+                cout<<"-Enter [EXIT] to exit";
+                moveCursor(2,20);
+                cout<<"-Enter [NEXT] to";
+                moveCursor(3,21);
+                cout<<"continue to next page";
+                moveCursor(2,23);
+                cout<<"-Enter [ID] to book";
+                moveCursor(2,24);
+                cout<<" view package detail";
+                moveCursor(60,36);
+                cout<<"Enter your choice:";
+                display = get_text("nospace");
+                if(display == "EXIT" || display == "E"){
+                    return ("EXIT");
+                }
+                else if(display == "NEXT" || display == "N"){
+                    design();
+                    headline(topic);
+                    itineraryHead();
+                }
+                else if(display == "ID"){
+                    break;
+                }
+                else{
+                    goto ERROR_LOOP;
+                }
+                count = 0;
+            }
+            if(fin.eof()){
+                break;
+            }
+        }
+    }
+    fin.close();
+    if(count == -1){
+        while(choice != 0){
+            design();
+            headline(topic);
+            moveCursor(60,8);
+            cout<<"**** Package Not Found!! ***";
+            moveCursor(60,18);
+            cout<<"1. Try Again";
+            moveCursor(60,20);
+            cout<<"2. Exit";
+            moveCursor(60,36);
+            cout<<"Enter Your Choice: ";
+            cin>>choice;
+            switch(choice){
+                case 1:{
+                    searching();//calls same functio again
+                }
+                case 2:{
+                    return ("EXIT");
+                }
+                default:{
+                    choice = -1;
+                    break;
+                }
+            }
+        }
+    }
+    else if(count != -1){//to desplay details of package
+        count = -1;
+        moveCursor(2,18);
+        cout<<"-Enter [EXIT] to exit";
+        moveCursor(60,36);
+        cout<<"Enter Package ID: ";
+        cin>>ID;
+        ID = upper(ID);
+        if(ID == "EXIT" || ID == "E"){
+            return ("EXIT");
+        }
+        ID = detail(ID);
+        if(ID == "TRY AGAIN"){
+            goto TRY;
+        }
+        else if(ID == "EXIT"){
+            return ("EXIT");
+        }
+        else{
+            moveCursor(60,36);
+            cout<<"Press  any key to continue....";
+            getch();
+            return (ID);
+        }  
+    }
+}
+
+string Itinerary :: list(){
+    topic = "List Itinerary";
+    fstream fin;
+    string search,ID;
+    design();
+    moveCursor(60,20);
+TRY:
+    fin.open("zitinerary.txt", ios::in);
+    vector<string>row;
+    string line, word,temp;
+    design();
+    headline(topic);
+    itineraryHead();
+    count = -1;
+    while(!fin.eof()){
+        row.clear();
+        getline(fin,line);
+        stringstream s(line);
+        while(getline(s,word,';'))
+        {
+            row.push_back(word);
+        }
+        if(!fin.eof()){
+            packageId=row[0];
+            title=row[1];
+            start=row[2];
+            end=row[3];
+            days=row[4];
+            expense=row[5];
+            
+                displayItinerary(count);
+                count += 1;
+            
+            if(count == 26){
+ERROR_LOOP:
+                moveCursor(2,18);
+                cout<<"-Enter [EXIT] to exit";
+                moveCursor(2,20);
+                cout<<"-Enter [NEXT] to";
+                moveCursor(3,21);
+                cout<<"continue to next page";
+                moveCursor(2,23);
+                cout<<"Enter your choice:";
+                display = get_text("nospace");
+                if(display == "EXIT" || display == "E"){
+                    return ("EXIT");
+                }
+                else if(display == "NEXT" || display == "N"){
+                    design();
+                    headline(topic);
+                    itineraryHead();
+                }
+                else{
+                    goto ERROR_LOOP;
+                }
+                count = 0;
+            }
+            if(fin.eof()){
+                break;
+            }
+        }
+    }
+    fin.close();
+    if(count == -1){
+            design();
+            headline(topic);
+            moveCursor(60,18);
+            cout<<"**** File Empty !! ***";
+            moveCursor(60,36);
+            cout<<"Press any key to continue....";
+            getch();
+            return ("EXIT");
+    }
+    else{
+        moveCursor(60,36);
+        cout<<"Press  any key to continue....";
         getch();
+        return (ID);
     }
 }
 
